@@ -45,9 +45,10 @@ build-parser: configure ## Generate lexer and parser for CX grammar
 	goyacc -o cxgo/cxgo.go cxgo/cxgo.y
 
 build: configure build-parser ## Build CX from sources
+	make format
 	go build -tags full -i -o $(GOPATH)/bin/cx github.com/skycoin/cx/cxgo/
 	chmod +x $(GOPATH)/bin/cx
-	make format
+	
 
 install-deps-Linux:
 	echo 'Installing dependencies for $(UNAME_S)'
@@ -96,8 +97,8 @@ update-golden-files: build ## Update golden files used in CX test suite
 	ls -1 tests/ | grep '.cx$$' | xargs -I NAME cx -t -co tests/testdata/tokens/NAME.txt tests/NAME
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/cx ./cx
-	goimports -w -local github.com/skycoin/cx ./cxgo
+	gofmt -w ./cx
+	gofmt -w $(shell find ./cxgo -type f -name '*.go' -not -name 'cxgo.go' -not -name 'cxgo.nn.go' -not -name 'cxgo0.go' -not -name 'cxgo0.nn.go')
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
