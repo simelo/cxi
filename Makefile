@@ -88,6 +88,7 @@ install-linters: ## Install linters
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	golangci-lint run -c .golangci.yml ./cx
+	golangci-lint run -c .golangci.yml ./cxgo
 
 test: build ## Run CX test suite.
 	go test -race -tags full github.com/skycoin/cx/cxgo/
