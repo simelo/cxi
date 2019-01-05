@@ -74,6 +74,7 @@ install-deps: configure $(INSTALL_DEPS)
 	go get github.com/go-gl/gltext
 	go get github.com/blynn/nex
 	go get github.com/cznic/goyacc
+	go get golang.org/x/tools/cmd/goimports
 #	go get github.com/skycoin/cx/...
 
 install: install-deps build configure-workspace ## Install CX from sources. Build dependencies
