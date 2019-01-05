@@ -1,8 +1,9 @@
 package actions
 
 import (
-	. "github.com/skycoin/cx/cx"
 	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	. "github.com/skycoin/cx/cx"
 )
 
 func IterationExpressions(init []*CXExpression, cond []*CXExpression, incr []*CXExpression, statements []*CXExpression) []*CXExpression {

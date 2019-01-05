@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+
 	. "github.com/skycoin/cx/cx"
 )
 

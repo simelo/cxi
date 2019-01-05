@@ -2,9 +2,11 @@ package actions
 
 import (
 	"fmt"
-	. "github.com/skycoin/cx/cx"
-	"github.com/skycoin/skycoin/src/cipher/encoder"
 	"os"
+
+	"github.com/skycoin/skycoin/src/cipher/encoder"
+
+	. "github.com/skycoin/cx/cx"
 )
 
 func PostfixExpressionArray(prevExprs []*CXExpression, postExprs []*CXExpression) []*CXExpression {
