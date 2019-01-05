@@ -13,17 +13,17 @@ func opF64F64(expr *CXExpression, fp int) {
 	out1Offset := GetFinalOffset(fp, out1)
 
 	switch out1.Type {
-	case TYPE_STR:
+	case TypeStr:
 		WriteObject(out1Offset, encoder.Serialize(strconv.FormatFloat(ReadF64(fp, inp1), 'f', -1, 64)))
-	case TYPE_BYTE:
+	case TypeByte:
 		WriteMemory(out1Offset, FromByte(byte(ReadF64(fp, inp1))))
-	case TYPE_I32:
+	case TypeI32:
 		WriteMemory(out1Offset, FromI32(int32(ReadF64(fp, inp1))))
-	case TYPE_I64:
+	case TypeI64:
 		WriteMemory(out1Offset, FromI64(int64(ReadF64(fp, inp1))))
-	case TYPE_F32:
+	case TypeF32:
 		WriteMemory(out1Offset, FromF32(float32(ReadF64(fp, inp1))))
-	case TYPE_F64:
+	case TypeF64:
 		WriteMemory(out1Offset, FromF64(ReadF64(fp, inp1)))
 	}
 }

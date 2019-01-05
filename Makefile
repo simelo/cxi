@@ -45,10 +45,10 @@ build-parser: configure ## Generate lexer and parser for CX grammar
 	goyacc -o cxgo/cxgo.go cxgo/cxgo.y
 
 build: configure build-parser ## Build CX from sources
-	gofmt -w ./cx
+	goimports -w ./cx
 	go build -tags full -i -o $(GOPATH)/bin/cx github.com/skycoin/cx/cxgo/
 	chmod +x $(GOPATH)/bin/cx
-	gofmt -w $(shell find ./cxgo -type f -name '*.go' -not -name 'cxgo.go' -not -name 'cxgo.nn.go' -not -name 'cxgo0.go' -not -name 'cxgo0.nn.go')
+	goimports -w $(shell find ./cxgo -type f -name '*.go' -not -name 'cxgo.go' -not -name 'cxgo.nn.go' -not -name 'cxgo0.go' -not -name 'cxgo0.nn.go')
 	
 
 install-deps-Linux:
@@ -87,7 +87,7 @@ install-linters: ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 lint: ## Run linters. Use make install-linters first.
-	vendorcheck ./...
+#	vendorcheck ./...
 	golangci-lint run -c .golangci.yml ./cx
 	golangci-lint run -c .golangci.yml ./cxgo
 

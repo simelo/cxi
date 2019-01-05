@@ -14,18 +14,18 @@ func SliceLiteralExpression(typSpec int, exprs []*CXExpression) []*CXExpression 
 		panic(err)
 	}
 
-	symName := MakeGenSym(LOCAL_PREFIX)
+	symName := MakeGenSym(LocalPrefix)
 
 	// adding the declaration
 	slcVarExpr := MakeExpression(nil, CurrentFile, LineNo)
 	slcVarExpr.Package = pkg
 	slcVar := MakeArgument(symName, CurrentFile, LineNo)
-	slcVar = DeclarationSpecifiers(slcVar, 0, DECL_SLICE)
+	slcVar = DeclarationSpecifiers(slcVar, 0, DeclSlice)
 	slcVar.AddType(TypeNames[typSpec])
 
 	// slcVar.IsSlice = true
 
-	slcVar.TotalSize = TYPE_POINTER_SIZE
+	slcVar.TotalSize = TypePointerSize
 
 	slcVarExpr.Outputs = append(slcVarExpr.Outputs, slcVar)
 	slcVar.Package = pkg
@@ -72,14 +72,14 @@ func SliceLiteralExpression(typSpec int, exprs []*CXExpression) []*CXExpression 
 			// result = append(result, expr)
 			result = append(result, symExpr)
 
-			symInp.TotalSize = TYPE_POINTER_SIZE
-			symOut.TotalSize = TYPE_POINTER_SIZE
+			symInp.TotalSize = TypePointerSize
+			symOut.TotalSize = TypePointerSize
 		} else {
 			result = append(result, expr)
 		}
 	}
 
-	symNameOutput := MakeGenSym(LOCAL_PREFIX)
+	symNameOutput := MakeGenSym(LocalPrefix)
 
 	symOutput := MakeArgument(symNameOutput, CurrentFile, LineNo).AddType(TypeNames[typSpec])
 	// symOutput.PassBy = PASSBY_REFERENCE
@@ -95,8 +95,8 @@ func SliceLiteralExpression(typSpec int, exprs []*CXExpression) []*CXExpression 
 	symInput.Package = pkg
 	// symInput.PassBy = PASSBY_REFERENCE
 
-	symInput.TotalSize = TYPE_POINTER_SIZE
-	symOutput.TotalSize = TYPE_POINTER_SIZE
+	symInput.TotalSize = TypePointerSize
+	symOutput.TotalSize = TypePointerSize
 
 	symExpr := MakeExpression(Natives[OP_IDENTITY], CurrentFile, LineNo)
 	symExpr.Package = pkg
@@ -158,7 +158,7 @@ func PrimaryStructLiteralExternal(impName string, ident string, strctFlds []*CXE
 			if strct, err := PRGRM.GetStruct(ident, impName); err == nil {
 				for _, expr := range strctFlds {
 					fld := MakeArgument("", CurrentFile, LineNo)
-					fld.AddType(TypeNames[TYPE_IDENTIFIER])
+					fld.AddType(TypeNames[TypeIdentifier])
 					fld.Name = expr.Outputs[0].Name
 
 					expr.IsStructLiteral = true
@@ -194,12 +194,12 @@ func ArrayLiteralExpression(arrSize int, typSpec int, exprs []*CXExpression) []*
 		panic(err)
 	}
 
-	symName := MakeGenSym(LOCAL_PREFIX)
+	symName := MakeGenSym(LocalPrefix)
 
 	arrVarExpr := MakeExpression(nil, CurrentFile, LineNo)
 	arrVarExpr.Package = pkg
 	arrVar := MakeArgument(symName, CurrentFile, LineNo)
-	arrVar = DeclarationSpecifiers(arrVar, arrSize, DECL_ARRAY)
+	arrVar = DeclarationSpecifiers(arrVar, arrSize, DeclArray)
 	arrVar.AddType(TypeNames[typSpec])
 	arrVar.TotalSize = arrVar.Size * TotalLength(arrVar.Lengths)
 
@@ -218,15 +218,15 @@ func ArrayLiteralExpression(arrSize int, typSpec int, exprs []*CXExpression) []*
 			sym.Package = pkg
 			sym.PreviouslyDeclared = true
 
-			if sym.Type == TYPE_STR || sym.Type == TYPE_AFF {
-				sym.PassBy = PASSBY_REFERENCE
+			if sym.Type == TypeStr || sym.Type == TypeAff {
+				sym.PassBy = PassbyReference
 			}
 
-			idxExpr := WritePrimary(TYPE_I32, encoder.Serialize(int32(endPointsCounter)), false)
+			idxExpr := WritePrimary(TypeI32, encoder.Serialize(int32(endPointsCounter)), false)
 			endPointsCounter++
 
 			sym.Indexes = append(sym.Indexes, idxExpr[0].Outputs[0])
-			sym.DereferenceOperations = append(sym.DereferenceOperations, DEREF_ARRAY)
+			sym.DereferenceOperations = append(sym.DereferenceOperations, DerefArray)
 
 			symExpr := MakeExpression(nil, CurrentFile, LineNo)
 			symExpr.Outputs = append(symExpr.Outputs, sym)
@@ -252,7 +252,7 @@ func ArrayLiteralExpression(arrSize int, typSpec int, exprs []*CXExpression) []*
 		}
 	}
 
-	symNameOutput := MakeGenSym(LOCAL_PREFIX)
+	symNameOutput := MakeGenSym(LocalPrefix)
 
 	symOutput := MakeArgument(symNameOutput, CurrentFile, LineNo).AddType(TypeNames[typSpec])
 	symOutput.Lengths = append(symOutput.Lengths, arrSize)

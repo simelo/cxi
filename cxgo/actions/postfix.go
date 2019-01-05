@@ -19,9 +19,9 @@ func PostfixExpressionArray(prevExprs []*CXExpression, postExprs []*CXExpression
 
 	elt.IsArray = false
 	pastOps := elt.DereferenceOperations
-	if len(pastOps) < 1 || pastOps[len(pastOps)-1] != DEREF_ARRAY {
+	if len(pastOps) < 1 || pastOps[len(pastOps)-1] != DerefArray {
 		// this way we avoid calling deref_array multiple times (one for each index)
-		elt.DereferenceOperations = append(elt.DereferenceOperations, DEREF_ARRAY)
+		elt.DereferenceOperations = append(elt.DereferenceOperations, DerefArray)
 	}
 
 	if !elt.IsDereferenceFirst {
@@ -35,7 +35,7 @@ func PostfixExpressionArray(prevExprs []*CXExpression, postExprs []*CXExpression
 			// expr.AddInput(postExprs[len(postExprs)-1].Outputs[0])
 			fld.Indexes = append(fld.Indexes, postExprs[len(postExprs)-1].Outputs[0])
 		} else {
-			sym := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[postExprs[len(postExprs)-1].Inputs[0].Type])
+			sym := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[postExprs[len(postExprs)-1].Inputs[0].Type])
 			sym.Package = postExprs[len(postExprs)-1].Package
 			sym.PreviouslyDeclared = true
 			postExprs[len(postExprs)-1].AddOutput(sym)
@@ -51,7 +51,7 @@ func PostfixExpressionArray(prevExprs []*CXExpression, postExprs []*CXExpression
 		if len(postExprs[len(postExprs)-1].Outputs) < 1 {
 			// then it's an expression (e.g. i32.add(0, 0))
 			// we create a gensym for it
-			idxSym := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[postExprs[len(postExprs)-1].Operator.Outputs[0].Type])
+			idxSym := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[postExprs[len(postExprs)-1].Operator.Outputs[0].Type])
 			idxSym.Size = postExprs[len(postExprs)-1].Operator.Outputs[0].Size
 			idxSym.TotalSize = postExprs[len(postExprs)-1].Operator.Outputs[0].Size
 
@@ -155,7 +155,7 @@ func PostfixExpressionIncDec(prevExprs []*CXExpression, isInc bool) []*CXExpress
 		expr = MakeExpression(Natives[OP_I32_SUB], CurrentFile, LineNo)
 	}
 
-	val := WritePrimary(TYPE_I32, encoder.SerializeAtomic(int32(1)), false)
+	val := WritePrimary(TypeI32, encoder.SerializeAtomic(int32(1)), false)
 
 	expr.Package = pkg
 
@@ -177,7 +177,7 @@ func PostfixExpressionField(prevExprs []*CXExpression, ident string) {
 		// right.IsRest = true
 		// left.DereferenceOperations = append(left.DereferenceOperations, DEREF_FIELD)
 		fld := MakeArgument(ident, CurrentFile, LineNo)
-		fld.AddType(TypeNames[TYPE_IDENTIFIER])
+		fld.AddType(TypeNames[TypeIdentifier])
 		left.Fields = append(left.Fields, fld)
 	} else {
 		left.IsRest = true
@@ -231,7 +231,7 @@ func PostfixExpressionField(prevExprs []*CXExpression, ident string) {
 				// then left is not a package name
 				if IsCorePackage(left.Name) {
 					println(CompilationError(left.FileName, left.FileLine), fmt.Sprintf("identifier '%s' does not exist", left.Name))
-					os.Exit(CX_COMPILATION_ERROR)
+					os.Exit(CxCompilationError)
 					return
 				}
 
@@ -239,7 +239,7 @@ func PostfixExpressionField(prevExprs []*CXExpression, ident string) {
 				left.IsStruct = true
 
 				fld := MakeArgument(ident, CurrentFile, LineNo)
-				fld.AddType(TypeNames[TYPE_IDENTIFIER])
+				fld.AddType(TypeNames[TypeIdentifier])
 				left.Fields = append(left.Fields, fld)
 			}
 		} else {

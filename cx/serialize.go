@@ -831,13 +831,13 @@ func opDeserialize(expr *CXExpression, fp int) {
 	inpOffset := GetFinalOffset(fp, inp)
 
 	var off int32
-	encoder.DeserializeAtomic(PROGRAM.Memory[inpOffset:inpOffset+TYPE_POINTER_SIZE], &off)
+	encoder.DeserializeAtomic(PROGRAM.Memory[inpOffset:inpOffset+TypePointerSize], &off)
 
 	var l int32
-	_l := PROGRAM.Memory[off+OBJECT_HEADER_SIZE : off+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE]
+	_l := PROGRAM.Memory[off+ObjectHeaderSize : off+ObjectHeaderSize+SliceHeaderSize]
 	encoder.DeserializeAtomic(_l[:4], &l)
 
-	Deserialize(PROGRAM.Memory[off+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE : off+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE+l])
+	Deserialize(PROGRAM.Memory[off+ObjectHeaderSize+SliceHeaderSize : off+ObjectHeaderSize+SliceHeaderSize+l])
 }
 
 func dsName(off int32, size int32, s *sAll) string {

@@ -99,7 +99,7 @@ func (expr *CXExpression) AddLabel(lbl string) *CXExpression {
 // 		nextOutIdx := len(expr.Outputs)
 
 // 		var typ string
-// 		if expr.Operator.Name == ID_FN || expr.Operator.Name == INIT_FN {
+// 		if expr.Operator.Name == IdFn || expr.Operator.Name == INIT_FN {
 // 			var tmp string
 // 			encoder.DeserializeRaw(*expr.Inputs[0].Value, &tmp)
 

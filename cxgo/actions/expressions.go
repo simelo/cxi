@@ -17,7 +17,7 @@ func IterationExpressions(init []*CXExpression, cond []*CXExpression, incr []*CX
 	upExpr := MakeExpression(jmpFn, CurrentFile, LineNo)
 	upExpr.Package = pkg
 
-	trueArg := WritePrimary(TYPE_BOOL, encoder.Serialize(true), false)
+	trueArg := WritePrimary(TypeBool, encoder.Serialize(true), false)
 
 	upLines := (len(statements) + len(incr) + len(cond) + 2) * -1
 	downLines := 0
@@ -30,7 +30,7 @@ func IterationExpressions(init []*CXExpression, cond []*CXExpression, incr []*CX
 	downExpr.Package = pkg
 
 	if len(cond[len(cond)-1].Outputs) < 1 {
-		predicate := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[cond[len(cond)-1].Operator.Outputs[0].Type])
+		predicate := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[cond[len(cond)-1].Operator.Outputs[0].Type])
 		predicate.Package = pkg
 		predicate.PreviouslyDeclared = true
 		cond[len(cond)-1].AddOutput(predicate)
@@ -80,7 +80,7 @@ func trueJmpExpressions() []*CXExpression {
 
 	expr := MakeExpression(Natives[OP_JMP], CurrentFile, LineNo)
 
-	trueArg := WritePrimary(TYPE_BOOL, encoder.Serialize(true), false)
+	trueArg := WritePrimary(TypeBool, encoder.Serialize(true), false)
 	expr.AddInput(trueArg[0].Outputs[0])
 
 	expr.Package = pkg
@@ -115,11 +115,11 @@ func SelectionExpressions(condExprs []*CXExpression, thenExprs []*CXExpression, 
 		predicate = condExprs[len(condExprs)-1].Outputs[0]
 	} else {
 		// then it's an expression
-		predicate = MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo)
+		predicate = MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo)
 		if condExprs[len(condExprs)-1].IsMethodCall {
 			// we'll change this once we have access to method's types in
 			// ProcessMethodCall
-			predicate.AddType(TypeNames[TYPE_BOOL])
+			predicate.AddType(TypeNames[TypeBool])
 			condExprs[len(condExprs)-1].Inputs = append(condExprs[len(condExprs)-1].Outputs, condExprs[len(condExprs)-1].Inputs...)
 			condExprs[len(condExprs)-1].Outputs = nil
 		} else {
@@ -141,7 +141,7 @@ func SelectionExpressions(condExprs []*CXExpression, thenExprs []*CXExpression, 
 	skipExpr := MakeExpression(jmpFn, CurrentFile, LineNo)
 	skipExpr.Package = pkg
 
-	trueArg := WritePrimary(TYPE_BOOL, encoder.Serialize(true), false)
+	trueArg := WritePrimary(TypeBool, encoder.Serialize(true), false)
 	skipLines := len(elseExprs)
 
 	skipExpr.AddInput(trueArg[0].Outputs[0])
@@ -167,7 +167,7 @@ func UndefinedTypeOperation(leftExprs []*CXExpression, rightExprs []*CXExpressio
 	}
 
 	if len(leftExprs[len(leftExprs)-1].Outputs) < 1 {
-		name := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[leftExprs[len(leftExprs)-1].Inputs[0].Type])
+		name := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[leftExprs[len(leftExprs)-1].Inputs[0].Type])
 
 		name.Size = leftExprs[len(leftExprs)-1].Operator.Outputs[0].Size
 		name.TotalSize = leftExprs[len(leftExprs)-1].Operator.Outputs[0].Size
@@ -179,7 +179,7 @@ func UndefinedTypeOperation(leftExprs []*CXExpression, rightExprs []*CXExpressio
 	}
 
 	if len(rightExprs[len(rightExprs)-1].Outputs) < 1 {
-		name := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[rightExprs[len(rightExprs)-1].Inputs[0].Type])
+		name := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[rightExprs[len(rightExprs)-1].Inputs[0].Type])
 
 		name.Size = rightExprs[len(rightExprs)-1].Operator.Outputs[0].Size
 		name.TotalSize = rightExprs[len(rightExprs)-1].Operator.Outputs[0].Size
@@ -274,14 +274,14 @@ func UnaryExpression(op string, prevExprs []*CXExpression) []*CXExpression {
 	switch op {
 	case "*":
 		exprOut.DereferenceLevels++
-		exprOut.DereferenceOperations = append(exprOut.DereferenceOperations, DEREF_POINTER)
+		exprOut.DereferenceOperations = append(exprOut.DereferenceOperations, DerefPointer)
 		if !exprOut.IsArrayFirst {
 			exprOut.IsDereferenceFirst = true
 		}
 
 		exprOut.IsReference = false
 	case "&":
-		exprOut.PassBy = PASSBY_REFERENCE
+		exprOut.PassBy = PassbyReference
 	case "!":
 		if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
 			expr := MakeExpression(Natives[OP_BOOL_NOT], CurrentFile, LineNo)

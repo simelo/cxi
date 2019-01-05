@@ -14,17 +14,17 @@ func opI32I32(expr *CXExpression, fp int) {
 	out1Offset := GetFinalOffset(fp, out1)
 
 	switch out1.Type {
-	case TYPE_STR:
+	case TypeStr:
 		WriteObject(out1Offset, encoder.Serialize(strconv.Itoa(int(ReadI32(fp, inp1)))))
-	case TYPE_BYTE:
+	case TypeByte:
 		WriteMemory(out1Offset, FromByte(byte(ReadI32(fp, inp1))))
-	case TYPE_I32:
+	case TypeI32:
 		WriteMemory(out1Offset, FromI32(ReadI32(fp, inp1)))
-	case TYPE_I64:
+	case TypeI64:
 		WriteMemory(out1Offset, FromI64(int64(ReadI32(fp, inp1))))
-	case TYPE_F32:
+	case TypeF32:
 		WriteMemory(out1Offset, FromF32(float32(ReadI32(fp, inp1))))
-	case TYPE_F64:
+	case TypeF64:
 		WriteMemory(out1Offset, FromF64(float64(ReadI32(fp, inp1))))
 	}
 }

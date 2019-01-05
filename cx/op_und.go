@@ -14,17 +14,17 @@ func opLt(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) < ReadByte(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) < ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) < ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) < ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) < ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) < ReadF64(fp, inp2))
 	}
 
@@ -35,17 +35,17 @@ func opGt(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) > ReadByte(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) > ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) > ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) > ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) > ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) > ReadF64(fp, inp2))
 	}
 	WriteMemory(GetFinalOffset(fp, out1), outB1)
@@ -55,17 +55,17 @@ func opLteq(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) <= ReadByte(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) <= ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) <= ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) <= ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) <= ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) <= ReadF64(fp, inp2))
 	}
 
@@ -76,17 +76,17 @@ func opGteq(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) >= ReadByte(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) >= ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) >= ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) >= ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) >= ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) >= ReadF64(fp, inp2))
 	}
 
@@ -97,19 +97,19 @@ func opEqual(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) == ReadByte(fp, inp2))
-	case TYPE_BOOL:
+	case TypeBool:
 		outB1 = FromBool(ReadBool(fp, inp1) == ReadBool(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) == ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) == ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) == ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) == ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) == ReadF64(fp, inp2))
 	}
 
@@ -120,19 +120,19 @@ func opUnequal(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromBool(ReadByte(fp, inp1) != ReadByte(fp, inp2))
-	case TYPE_BOOL:
+	case TypeBool:
 		outB1 = FromBool(ReadBool(fp, inp1) != ReadBool(fp, inp2))
-	case TYPE_STR:
+	case TypeStr:
 		outB1 = FromBool(ReadStr(fp, inp1) != ReadStr(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromBool(ReadI32(fp, inp1) != ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromBool(ReadI64(fp, inp1) != ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromBool(ReadF32(fp, inp1) != ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromBool(ReadF64(fp, inp1) != ReadF64(fp, inp2))
 	}
 
@@ -143,9 +143,9 @@ func opBitand(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) & ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) & ReadI64(fp, inp2))
 	}
 
@@ -156,9 +156,9 @@ func opBitor(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) | ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) | ReadI64(fp, inp2))
 	}
 
@@ -169,9 +169,9 @@ func opBitxor(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) ^ ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) ^ ReadI64(fp, inp2))
 	}
 
@@ -182,15 +182,15 @@ func opMul(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromByte(ReadByte(fp, inp1) * ReadByte(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) * ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) * ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromF32(ReadF32(fp, inp1) * ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromF64(ReadF64(fp, inp1) * ReadF64(fp, inp2))
 	}
 
@@ -201,15 +201,15 @@ func opDiv(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromByte(ReadByte(fp, inp1) / ReadByte(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) / ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) / ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromF32(ReadF32(fp, inp1) / ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromF64(ReadF64(fp, inp1) / ReadF64(fp, inp2))
 	}
 
@@ -220,11 +220,11 @@ func opMod(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromByte(ReadByte(fp, inp1) % ReadByte(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) % ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) % ReadI64(fp, inp2))
 	}
 
@@ -235,15 +235,15 @@ func opAdd(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromByte(ReadByte(fp, inp1) + ReadByte(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) + ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) + ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromF32(ReadF32(fp, inp1) + ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromF64(ReadF64(fp, inp1) + ReadF64(fp, inp2))
 	}
 
@@ -254,15 +254,15 @@ func opSub(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		outB1 = FromByte(ReadByte(fp, inp1) - ReadByte(fp, inp2))
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(ReadI32(fp, inp1) - ReadI32(fp, inp2))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(ReadI64(fp, inp1) - ReadI64(fp, inp2))
-	case TYPE_F32:
+	case TypeF32:
 		outB1 = FromF32(ReadF32(fp, inp1) - ReadF32(fp, inp2))
-	case TYPE_F64:
+	case TypeF64:
 		outB1 = FromF64(ReadF64(fp, inp1) - ReadF64(fp, inp2))
 	}
 
@@ -273,9 +273,9 @@ func opBitshl(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(int32(uint32(ReadI32(fp, inp1)) << uint32(ReadI32(fp, inp2))))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(int64(uint64(ReadI64(fp, inp1)) << uint64(ReadI64(fp, inp2))))
 	}
 
@@ -286,9 +286,9 @@ func opBitshr(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(int32(uint32(ReadI32(fp, inp1)) >> uint32(ReadI32(fp, inp2))))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(int64(uint32(ReadI64(fp, inp1)) >> uint32(ReadI64(fp, inp2))))
 	}
 
@@ -299,9 +299,9 @@ func opBitclear(expr *CXExpression, fp int) {
 	inp1, inp2, out1 := expr.Inputs[0], expr.Inputs[1], expr.Outputs[0]
 	var outB1 []byte
 	switch inp1.Type {
-	case TYPE_I32:
+	case TypeI32:
 		outB1 = FromI32(int32(uint32(ReadI32(fp, inp1)) &^ uint32(ReadI32(fp, inp2))))
-	case TYPE_I64:
+	case TypeI64:
 		outB1 = FromI64(int64(uint32(ReadI64(fp, inp1)) &^ uint32(ReadI64(fp, inp2))))
 	}
 
@@ -312,11 +312,11 @@ func opLen(expr *CXExpression, fp int) {
 	inp1, out1 := expr.Inputs[0], expr.Outputs[0]
 	elt := GetAssignmentElement(inp1)
 
-	if elt.IsSlice || elt.Type == TYPE_AFF {
+	if elt.IsSlice || elt.Type == TypeAff {
 		preInp1Offset := GetFinalOffset(fp, inp1)
 
 		var inp1Offset int32
-		encoder.DeserializeAtomic(PROGRAM.Memory[preInp1Offset:preInp1Offset+TYPE_POINTER_SIZE], &inp1Offset)
+		encoder.DeserializeAtomic(PROGRAM.Memory[preInp1Offset:preInp1Offset+TypePointerSize], &inp1Offset)
 
 		if inp1Offset == 0 {
 			// then it's nil
@@ -324,11 +324,11 @@ func opLen(expr *CXExpression, fp int) {
 			return
 		}
 
-		sliceHeader := PROGRAM.Memory[inp1Offset+OBJECT_HEADER_SIZE : inp1Offset+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE]
+		sliceHeader := PROGRAM.Memory[inp1Offset+ObjectHeaderSize : inp1Offset+ObjectHeaderSize+SliceHeaderSize]
 		WriteMemory(GetFinalOffset(fp, out1), sliceHeader[:4])
-	} else if elt.Type == TYPE_STR {
+	} else if elt.Type == TypeStr {
 		var strOffset = int(GetStrOffset(fp, inp1))
-		WriteMemory(GetFinalOffset(fp, out1), PROGRAM.Memory[strOffset:strOffset+STR_HEADER_SIZE])
+		WriteMemory(GetFinalOffset(fp, out1), PROGRAM.Memory[strOffset:strOffset+StrHeaderSize])
 	} else {
 		outB1 := FromI32(int32(elt.Lengths[0]))
 		WriteMemory(GetFinalOffset(fp, out1), outB1)
@@ -343,11 +343,11 @@ func opAppend(expr *CXExpression, fp int) {
 	out1Offset := GetFinalOffset(fp, out1)
 
 	var inp1Offset int32
-	encoder.DeserializeAtomic(PROGRAM.Memory[preInp1Offset:preInp1Offset+TYPE_POINTER_SIZE], &inp1Offset)
+	encoder.DeserializeAtomic(PROGRAM.Memory[preInp1Offset:preInp1Offset+TypePointerSize], &inp1Offset)
 
 	var off int32
 
-	byts := PROGRAM.Memory[out1Offset : out1Offset+TYPE_POINTER_SIZE]
+	byts := PROGRAM.Memory[out1Offset : out1Offset+TypePointerSize]
 	encoder.DeserializeAtomic(byts, &off)
 
 	var heapOffset int
@@ -360,13 +360,13 @@ func opAppend(expr *CXExpression, fp int) {
 		if inp1Offset != 0 {
 			// then we need to reserve for obj1 too
 			// sliceHeader = PROGRAM.Memory[inp1Offset-SLICE_HEADER_SIZE : inp1Offset]
-			sliceHeader = PROGRAM.Memory[inp1Offset+OBJECT_HEADER_SIZE : inp1Offset+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE]
+			sliceHeader = PROGRAM.Memory[inp1Offset+ObjectHeaderSize : inp1Offset+ObjectHeaderSize+SliceHeaderSize]
 
 			encoder.DeserializeAtomic(sliceHeader[:4], &len1)
-			heapOffset = AllocateSeq((int(len1) * inp2.TotalSize) + inp2.TotalSize + OBJECT_HEADER_SIZE + SLICE_HEADER_SIZE)
+			heapOffset = AllocateSeq((int(len1) * inp2.TotalSize) + inp2.TotalSize + ObjectHeaderSize + SliceHeaderSize)
 		} else {
 			// then obj1 is nil and zero-sized
-			heapOffset = AllocateSeq(inp2.TotalSize + OBJECT_HEADER_SIZE + SLICE_HEADER_SIZE)
+			heapOffset = AllocateSeq(inp2.TotalSize + ObjectHeaderSize + SliceHeaderSize)
 		}
 
 		WriteMemory(out1Offset, encoder.SerializeAtomic(int32(heapOffset)))
@@ -374,9 +374,9 @@ func opAppend(expr *CXExpression, fp int) {
 		var obj1 []byte
 		var obj2 []byte
 
-		obj1 = PROGRAM.Memory[inp1Offset+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE : OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE+int32(inp1Offset)+len1*int32(inp2.TotalSize)]
+		obj1 = PROGRAM.Memory[inp1Offset+ObjectHeaderSize+SliceHeaderSize : ObjectHeaderSize+SliceHeaderSize+int32(inp1Offset)+len1*int32(inp2.TotalSize)]
 
-		if inp2.Type == TYPE_STR || inp2.Type == TYPE_AFF {
+		if inp2.Type == TypeStr || inp2.Type == TypeAff {
 			var strOffset = int32(GetStrOffset(fp, inp2))
 			obj2 = encoder.SerializeAtomic(strOffset)
 		} else {
@@ -385,13 +385,13 @@ func opAppend(expr *CXExpression, fp int) {
 
 		var size []byte
 		if inp1Offset != 0 {
-			size = encoder.SerializeAtomic(int32(len(obj1)) + int32(len(obj2)+SLICE_HEADER_SIZE))
+			size = encoder.SerializeAtomic(int32(len(obj1)) + int32(len(obj2)+SliceHeaderSize))
 		} else {
-			size = encoder.SerializeAtomic(int32(len(obj2) + SLICE_HEADER_SIZE))
+			size = encoder.SerializeAtomic(int32(len(obj2) + SliceHeaderSize))
 		}
 
-		var header = make([]byte, OBJECT_HEADER_SIZE)
-		for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+		var header = make([]byte, ObjectHeaderSize)
+		for c := 5; c < ObjectHeaderSize; c++ {
 			header[c] = size[c-5]
 		}
 
@@ -411,7 +411,7 @@ func opAppend(expr *CXExpression, fp int) {
 		WriteMemory(heapOffset, finalObj)
 	} else {
 		// then we have access to a size and capacity
-		sliceHeader := PROGRAM.Memory[inp1Offset+OBJECT_HEADER_SIZE : inp1Offset+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE]
+		sliceHeader := PROGRAM.Memory[inp1Offset+ObjectHeaderSize : inp1Offset+ObjectHeaderSize+SliceHeaderSize]
 
 		var l int32
 		var c int32
@@ -424,9 +424,9 @@ func opAppend(expr *CXExpression, fp int) {
 			var obj1 []byte
 			var obj2 []byte
 
-			obj1 = PROGRAM.Memory[inp1Offset+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE : int32(inp1Offset)+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE+l*int32(inp2.TotalSize)]
+			obj1 = PROGRAM.Memory[inp1Offset+ObjectHeaderSize+SliceHeaderSize : int32(inp1Offset)+ObjectHeaderSize+SliceHeaderSize+l*int32(inp2.TotalSize)]
 
-			if inp2.Type == TYPE_STR || inp2.Type == TYPE_AFF {
+			if inp2.Type == TypeStr || inp2.Type == TypeAff {
 				var strOffset = int32(GetStrOffset(fp, inp2))
 				obj2 = encoder.SerializeAtomic(strOffset)
 			} else {
@@ -436,14 +436,14 @@ func opAppend(expr *CXExpression, fp int) {
 			l++
 			c = c * 2
 
-			heapOffset = AllocateSeq(int(c)*inp2.TotalSize + OBJECT_HEADER_SIZE + SLICE_HEADER_SIZE)
+			heapOffset = AllocateSeq(int(c)*inp2.TotalSize + ObjectHeaderSize + SliceHeaderSize)
 
 			WriteMemory(out1Offset, encoder.SerializeAtomic(int32(heapOffset)))
 
-			size := encoder.SerializeAtomic(int32(int(c)*inp2.TotalSize + SLICE_HEADER_SIZE))
+			size := encoder.SerializeAtomic(int32(int(c)*inp2.TotalSize + SliceHeaderSize))
 
-			var header = make([]byte, OBJECT_HEADER_SIZE)
-			for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+			var header = make([]byte, ObjectHeaderSize)
+			for c := 5; c < ObjectHeaderSize; c++ {
 				header[c] = size[c-5]
 			}
 
@@ -463,11 +463,11 @@ func opAppend(expr *CXExpression, fp int) {
 			newL := encoder.SerializeAtomic(l + int32(1))
 
 			for i, byt := range newL {
-				PROGRAM.Memory[int(off)+OBJECT_HEADER_SIZE+i] = byt
+				PROGRAM.Memory[int(off)+ObjectHeaderSize+i] = byt
 			}
 
 			var obj2 []byte
-			if inp2.Type == TYPE_STR || inp2.Type == TYPE_AFF {
+			if inp2.Type == TypeStr || inp2.Type == TypeAff {
 				var strOffset = int32(GetStrOffset(fp, inp2))
 				obj2 = encoder.SerializeAtomic(strOffset)
 			} else {
@@ -476,7 +476,7 @@ func opAppend(expr *CXExpression, fp int) {
 
 			// write the obj
 			for i, byt := range obj2 {
-				PROGRAM.Memory[off+OBJECT_HEADER_SIZE+SLICE_HEADER_SIZE+int32(int(l)*inp2.TotalSize+i)] = byt
+				PROGRAM.Memory[off+ObjectHeaderSize+SliceHeaderSize+int32(int(l)*inp2.TotalSize+i)] = byt
 			}
 		}
 	}
@@ -525,16 +525,16 @@ func buildString(expr *CXExpression, fp int) []byte {
 				res = append(res, []byte(checkForEscapedChars(ReadStr(fp, inp)))...)
 			case 'd':
 				switch inp.Type {
-				case TYPE_I32:
+				case TypeI32:
 					res = append(res, []byte(strconv.FormatInt(int64(ReadI32(fp, inp)), 10))...)
-				case TYPE_I64:
+				case TypeI64:
 					res = append(res, []byte(strconv.FormatInt(ReadI64(fp, inp), 10))...)
 				}
 			case 'f':
 				switch inp.Type {
-				case TYPE_F32:
+				case TypeF32:
 					res = append(res, []byte(strconv.FormatFloat(float64(ReadF32(fp, inp)), 'f', 7, 32))...)
-				case TYPE_F64:
+				case TypeF64:
 					res = append(res, []byte(strconv.FormatFloat(ReadF64(fp, inp), 'f', 16, 64))...)
 				}
 			case 'v':
@@ -611,10 +611,10 @@ func opRead(expr *CXExpression, fp int) {
 	}
 	byts := encoder.Serialize(text)
 	size := encoder.Serialize(int32(len(byts)))
-	heapOffset := AllocateSeq(len(byts) + OBJECT_HEADER_SIZE)
+	heapOffset := AllocateSeq(len(byts) + ObjectHeaderSize)
 
-	var header = make([]byte, OBJECT_HEADER_SIZE)
-	for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+	var header = make([]byte, ObjectHeaderSize)
+	for c := 5; c < ObjectHeaderSize; c++ {
 		header[c] = size[c-5]
 	}
 
@@ -622,7 +622,7 @@ func opRead(expr *CXExpression, fp int) {
 
 	WriteMemory(heapOffset, obj)
 
-	off := encoder.SerializeAtomic(int32(heapOffset + OBJECT_HEADER_SIZE))
+	off := encoder.SerializeAtomic(int32(heapOffset + ObjectHeaderSize))
 
 	WriteMemory(out1Offset, off)
 }

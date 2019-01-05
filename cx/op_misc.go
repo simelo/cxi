@@ -7,15 +7,15 @@ import (
 
 // EscapeAnalysis ...
 func EscapeAnalysis(fp int, inpOffset, outOffset int, arg *CXArgument) {
-	heapOffset := AllocateSeq(arg.TotalSize + OBJECT_HEADER_SIZE)
+	heapOffset := AllocateSeq(arg.TotalSize + ObjectHeaderSize)
 
 	byts := ReadMemory(inpOffset, arg)
 
 	// creating a header for this object
 	size := encoder.SerializeAtomic(int32(len(byts)))
 
-	var header = make([]byte, OBJECT_HEADER_SIZE)
-	for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+	var header = make([]byte, ObjectHeaderSize)
+	for c := 5; c < ObjectHeaderSize; c++ {
 		header[c] = size[c-5]
 	}
 
@@ -44,9 +44,9 @@ func opIdentity(expr *CXExpression, fp int) {
 		EscapeAnalysis(fp, inp1Offset, out1Offset, inp1)
 	} else {
 		switch elt.PassBy {
-		case PASSBY_VALUE:
+		case PassbyValue:
 			WriteMemory(out1Offset, ReadMemory(inp1Offset, inp1))
-		case PASSBY_REFERENCE:
+		case PassbyReference:
 			WriteMemory(out1Offset, encoder.SerializeAtomic(int32(inp1Offset)))
 		}
 	}

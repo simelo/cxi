@@ -18,145 +18,145 @@ func SetCorrectArithmeticOp(expr *CXExpression) {
 		switch op.OpCode {
 		case OP_I32_MUL:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_MUL]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_MUL]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_MUL]
 			}
 		case OP_I32_DIV:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_DIV]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_DIV]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_DIV]
 			}
 		case OP_I32_MOD:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_MOD]
 			}
 
 		case OP_I32_ADD:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_ADD]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_ADD]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_ADD]
 			}
 		case OP_I32_SUB:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_ADD]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_ADD]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_ADD]
 			}
 
 		case OP_I32_BITSHL:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_BITSHL]
 			}
 		case OP_I32_BITSHR:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_BITSHR]
 			}
 
 		case OP_I32_LT:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_LT]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_LT]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_LT]
 			}
 		case OP_I32_GT:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_GT]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_GT]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_GT]
 			}
 		case OP_I32_LTEQ:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_LTEQ]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_LTEQ]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_LTEQ]
 			}
 		case OP_I32_GTEQ:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_GTEQ]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_GTEQ]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_GTEQ]
 			}
 
 		case OP_I32_EQ:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_EQ]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_EQ]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_EQ]
 			}
 		case OP_I32_UNEQ:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_UNEQ]
-			case TYPE_F32:
+			case TypeF32:
 				expr.Operator = Natives[OP_F32_UNEQ]
-			case TYPE_F64:
+			case TypeF64:
 				expr.Operator = Natives[OP_F64_UNEQ]
 			}
 
 		case OP_I32_BITAND:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_BITAND]
 			}
 
 		case OP_I32_BITXOR:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_BITXOR]
 			}
 
 		case OP_I32_BITOR:
 			switch typ {
-			case TYPE_I32:
-			case TYPE_I64:
+			case TypeI32:
+			case TypeI64:
 				expr.Operator = Natives[OP_I64_BITOR]
 			}
 		}
@@ -179,10 +179,10 @@ func WritePrimary(typ int, byts []byte, isGlobal bool) []*CXExpression {
 		arg.TotalSize = size
 		arg.Offset = DataOffset
 
-		if arg.Type == TYPE_STR || arg.Type == TYPE_AFF {
-			arg.PassBy = PASSBY_REFERENCE
-			arg.Size = TYPE_POINTER_SIZE
-			arg.TotalSize = TYPE_POINTER_SIZE
+		if arg.Type == TypeStr || arg.Type == TypeAff {
+			arg.PassBy = PassbyReference
+			arg.Size = TypePointerSize
+			arg.TotalSize = TypePointerSize
 		}
 
 		for i, byt := range byts {
@@ -215,7 +215,7 @@ func TotalLength(lengths []int) int {
 func StructLiteralFields(ident string) *CXExpression {
 	if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
 		arg := MakeArgument("", CurrentFile, LineNo)
-		arg.AddType(TypeNames[TYPE_IDENTIFIER])
+		arg.AddType(TypeNames[TypeIdentifier])
 		arg.Name = ident
 		arg.Package = pkg
 
@@ -234,12 +234,12 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	argStrct := MakeStruct("Argument")
 	// argStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR)
 
-	argFldName := MakeField("Name", TYPE_STR, "", 0)
-	argFldName.TotalSize = GetArgSize(TYPE_STR)
-	argFldIndex := MakeField("Index", TYPE_I32, "", 0)
-	argFldIndex.TotalSize = GetArgSize(TYPE_I32)
-	argFldType := MakeField("Type", TYPE_STR, "", 0)
-	argFldType.TotalSize = GetArgSize(TYPE_STR)
+	argFldName := MakeField("Name", TypeStr, "", 0)
+	argFldName.TotalSize = GetArgSize(TypeStr)
+	argFldIndex := MakeField("Index", TypeI32, "", 0)
+	argFldIndex.TotalSize = GetArgSize(TypeI32)
+	argFldType := MakeField("Type", TypeStr, "", 0)
+	argFldType.TotalSize = GetArgSize(TypeStr)
 
 	argStrct.AddField(argFldName)
 	argStrct.AddField(argFldIndex)
@@ -251,7 +251,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	exprStrct := MakeStruct("Expression")
 	// exprStrct.Size = GetArgSize(TYPE_STR)
 
-	exprFldOperator := MakeField("Operator", TYPE_STR, "", 0)
+	exprFldOperator := MakeField("Operator", TypeStr, "", 0)
 
 	exprStrct.AddField(exprFldOperator)
 
@@ -261,16 +261,16 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	fnStrct := MakeStruct("Function")
 	// fnStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR)
 
-	fnFldName := MakeField("Name", TYPE_STR, "", 0)
-	fnFldName.TotalSize = GetArgSize(TYPE_STR)
+	fnFldName := MakeField("Name", TypeStr, "", 0)
+	fnFldName.TotalSize = GetArgSize(TypeStr)
 
-	fnFldInpSig := MakeField("InputSignature", TYPE_STR, "", 0)
-	fnFldInpSig.Size = GetArgSize(TYPE_STR)
-	fnFldInpSig = DeclarationSpecifiers(fnFldInpSig, 0, DECL_SLICE)
+	fnFldInpSig := MakeField("InputSignature", TypeStr, "", 0)
+	fnFldInpSig.Size = GetArgSize(TypeStr)
+	fnFldInpSig = DeclarationSpecifiers(fnFldInpSig, 0, DeclSlice)
 
-	fnFldOutSig := MakeField("OutputSignature", TYPE_STR, "", 0)
-	fnFldOutSig.Size = GetArgSize(TYPE_STR)
-	fnFldOutSig = DeclarationSpecifiers(fnFldOutSig, 0, DECL_SLICE)
+	fnFldOutSig := MakeField("OutputSignature", TypeStr, "", 0)
+	fnFldOutSig.Size = GetArgSize(TypeStr)
+	fnFldOutSig = DeclarationSpecifiers(fnFldOutSig, 0, DeclSlice)
 
 	fnStrct.AddField(fnFldName)
 	fnStrct.AddField(fnFldInpSig)
@@ -283,8 +283,8 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	strctStrct := MakeStruct("Structure")
 	// strctStrct.Size = GetArgSize(TYPE_STR)
 
-	strctFldName := MakeField("Name", TYPE_STR, "", 0)
-	strctFldName.TotalSize = GetArgSize(TYPE_STR)
+	strctFldName := MakeField("Name", TypeStr, "", 0)
+	strctFldName.TotalSize = GetArgSize(TypeStr)
 
 	strctStrct.AddField(strctFldName)
 
@@ -294,7 +294,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	pkgStrct := MakeStruct("Structure")
 	// pkgStrct.Size = GetArgSize(TYPE_STR)
 
-	pkgFldName := MakeField("Name", TYPE_STR, "", 0)
+	pkgFldName := MakeField("Name", TypeStr, "", 0)
 
 	pkgStrct.AddField(pkgFldName)
 
@@ -304,10 +304,10 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	callStrct := MakeStruct("Caller")
 	// callStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_I32)
 
-	callFldFnName := MakeField("FnName", TYPE_STR, "", 0)
-	callFldFnName.TotalSize = GetArgSize(TYPE_STR)
-	callFldFnSize := MakeField("FnSize", TYPE_I32, "", 0)
-	callFldFnSize.TotalSize = GetArgSize(TYPE_I32)
+	callFldFnName := MakeField("FnName", TypeStr, "", 0)
+	callFldFnName.TotalSize = GetArgSize(TypeStr)
+	callFldFnSize := MakeField("FnSize", TypeI32, "", 0)
+	callFldFnSize.TotalSize = GetArgSize(TypeI32)
 
 	callStrct.AddField(callFldFnName)
 	callStrct.AddField(callFldFnSize)
@@ -318,10 +318,10 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	prgrmStrct := MakeStruct("Program")
 	// prgrmStrct.Size = GetArgSize(TYPE_I32) + GetArgSize(TYPE_I64)
 
-	prgrmFldCallCounter := MakeField("CallCounter", TYPE_I32, "", 0)
-	prgrmFldCallCounter.TotalSize = GetArgSize(TYPE_I32)
-	prgrmFldFreeHeap := MakeField("HeapUsed", TYPE_I64, "", 0)
-	prgrmFldFreeHeap.TotalSize = GetArgSize(TYPE_I64)
+	prgrmFldCallCounter := MakeField("CallCounter", TypeI32, "", 0)
+	prgrmFldCallCounter.TotalSize = GetArgSize(TypeI32)
+	prgrmFldFreeHeap := MakeField("HeapUsed", TypeI64, "", 0)
+	prgrmFldFreeHeap.TotalSize = GetArgSize(TypeI64)
 
 	// prgrmFldCaller := MakeField("Caller", TYPE_CUSTOM, "", 0)
 	prgrmFldCaller := DeclarationSpecifiersStruct(callStrct.Name, callStrct.Package.Name, false, currentFile, lineNo)
@@ -337,7 +337,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 func PrimaryIdentifier(ident string) []*CXExpression {
 	if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
 		arg := MakeArgument(ident, CurrentFile, LineNo)
-		arg.AddType(TypeNames[TYPE_IDENTIFIER])
+		arg.AddType(TypeNames[TypeIdentifier])
 		// arg.Typ = "ident"
 		arg.Name = ident
 		arg.Package = pkg

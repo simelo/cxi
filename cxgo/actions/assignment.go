@@ -11,10 +11,10 @@ func StructLiteralAssignment(to []*CXExpression, from []*CXExpression) []*CXExpr
 		if len(to[0].Outputs[0].Indexes) > 0 {
 			f.Outputs[0].Lengths = to[0].Outputs[0].Lengths
 			f.Outputs[0].Indexes = to[0].Outputs[0].Indexes
-			f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DEREF_ARRAY)
+			f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DerefArray)
 		}
 
-		f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DEREF_FIELD)
+		f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DerefField)
 	}
 
 	return from
@@ -23,7 +23,7 @@ func StructLiteralAssignment(to []*CXExpression, from []*CXExpression) []*CXExpr
 func ArrayLiteralAssignment(to []*CXExpression, from []*CXExpression) []*CXExpression {
 	for _, f := range from {
 		f.Outputs[0].Name = to[0].Outputs[0].Name
-		f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DEREF_ARRAY)
+		f.Outputs[0].DereferenceOperations = append(f.Outputs[0].DereferenceOperations, DerefArray)
 	}
 
 	return from
@@ -37,7 +37,7 @@ func ShortAssignment(expr *CXExpression, to []*CXExpression, from []*CXExpressio
 	if from[idx].Operator == nil {
 		expr.AddInput(from[idx].Outputs[0])
 	} else {
-		sym := MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, LineNo).AddType(TypeNames[from[idx].Inputs[0].Type])
+		sym := MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, LineNo).AddType(TypeNames[from[idx].Inputs[0].Type])
 		sym.Package = pkg
 		sym.PreviouslyDeclared = true
 		from[idx].AddOutput(sym)
