@@ -205,7 +205,7 @@ func CompilationError(currentFile string, lineNo int) string {
 }
 
 func TotalLength(lengths []int) int {
-	var total int = 1
+	var total = int(1)
 	for _, i := range lengths {
 		total *= i
 	}
@@ -232,7 +232,7 @@ func StructLiteralFields(ident string) *CXExpression {
 func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 	// Argument type
 	argStrct := MakeStruct("Argument")
-	// argStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR)
+	// argStrct.Size = GetArgSize(TypeStr) + GetArgSize(TypeStr)
 
 	argFldName := MakeField("Name", TypeStr, "", 0)
 	argFldName.TotalSize = GetArgSize(TypeStr)
@@ -249,7 +249,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Expression type
 	exprStrct := MakeStruct("Expression")
-	// exprStrct.Size = GetArgSize(TYPE_STR)
+	// exprStrct.Size = GetArgSize(TypeStr)
 
 	exprFldOperator := MakeField("Operator", TypeStr, "", 0)
 
@@ -259,7 +259,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Function type
 	fnStrct := MakeStruct("Function")
-	// fnStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR) + GetArgSize(TYPE_STR)
+	// fnStrct.Size = GetArgSize(TypeStr) + GetArgSize(TypeStr) + GetArgSize(TypeStr)
 
 	fnFldName := MakeField("Name", TypeStr, "", 0)
 	fnFldName.TotalSize = GetArgSize(TypeStr)
@@ -281,7 +281,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Structure type
 	strctStrct := MakeStruct("Structure")
-	// strctStrct.Size = GetArgSize(TYPE_STR)
+	// strctStrct.Size = GetArgSize(TypeStr)
 
 	strctFldName := MakeField("Name", TypeStr, "", 0)
 	strctFldName.TotalSize = GetArgSize(TypeStr)
@@ -292,7 +292,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Package type
 	pkgStrct := MakeStruct("Structure")
-	// pkgStrct.Size = GetArgSize(TYPE_STR)
+	// pkgStrct.Size = GetArgSize(TypeStr)
 
 	pkgFldName := MakeField("Name", TypeStr, "", 0)
 
@@ -302,7 +302,7 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Caller type
 	callStrct := MakeStruct("Caller")
-	// callStrct.Size = GetArgSize(TYPE_STR) + GetArgSize(TYPE_I32)
+	// callStrct.Size = GetArgSize(TypeStr) + GetArgSize(TypeI32)
 
 	callFldFnName := MakeField("FnName", TypeStr, "", 0)
 	callFldFnName.TotalSize = GetArgSize(TypeStr)
@@ -316,14 +316,14 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 
 	// Program type
 	prgrmStrct := MakeStruct("Program")
-	// prgrmStrct.Size = GetArgSize(TYPE_I32) + GetArgSize(TYPE_I64)
+	// prgrmStrct.Size = GetArgSize(TypeI32) + GetArgSize(TypeI64)
 
 	prgrmFldCallCounter := MakeField("CallCounter", TypeI32, "", 0)
 	prgrmFldCallCounter.TotalSize = GetArgSize(TypeI32)
 	prgrmFldFreeHeap := MakeField("HeapUsed", TypeI64, "", 0)
 	prgrmFldFreeHeap.TotalSize = GetArgSize(TypeI64)
 
-	// prgrmFldCaller := MakeField("Caller", TYPE_CUSTOM, "", 0)
+	// prgrmFldCaller := MakeField("Caller", TypeCUSTOM, "", 0)
 	prgrmFldCaller := DeclarationSpecifiersStruct(callStrct.Name, callStrct.Package.Name, false, currentFile, lineNo)
 	prgrmFldCaller.Name = "Caller"
 
@@ -335,20 +335,20 @@ func AffordanceStructs(pkg *CXPackage, currentFile string, lineNo int) {
 }
 
 func PrimaryIdentifier(ident string) []*CXExpression {
-	if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
-		arg := MakeArgument(ident, CurrentFile, LineNo)
-		arg.AddType(TypeNames[TypeIdentifier])
-		// arg.Typ = "ident"
-		arg.Name = ident
-		arg.Package = pkg
-
-		// expr := &CXExpression{Outputs: []*CXArgument{arg}}
-		expr := MakeExpression(nil, CurrentFile, LineNo)
-		expr.Outputs = []*CXArgument{arg}
-		expr.Package = pkg
-
-		return []*CXExpression{expr}
-	} else {
+	pkg, err := PRGRM.GetCurrentPackage()
+	if err != nil {
 		panic(err)
 	}
+	arg := MakeArgument(ident, CurrentFile, LineNo)
+	arg.AddType(TypeNames[TypeIdentifier])
+	// arg.Typ = "ident"
+	arg.Name = ident
+	arg.Package = pkg
+
+	// expr := &CXExpression{Outputs: []*CXArgument{arg}}
+	expr := MakeExpression(nil, CurrentFile, LineNo)
+	expr.Outputs = []*CXArgument{arg}
+	expr.Package = pkg
+
+	return []*CXExpression{expr}
 }

@@ -87,7 +87,7 @@ func SliceLiteralExpression(typSpec int, exprs []*CXExpression) []*CXExpression 
 	symOutput.Package = pkg
 	symOutput.PreviouslyDeclared = true
 
-	// symOutput.DeclarationSpecifiers = append(symOutput.DeclarationSpecifiers, DECL_ARRAY)
+	// symOutput.DeclarationSpecifiers = append(symOutput.DeclarationSpecifiers, DeclArray)
 
 	symInput := MakeArgument(symName, CurrentFile, LineNo).AddType(TypeNames[typSpec])
 	// symInput.DereferenceOperations = append(symInput.DereferenceOperations, DEREF_POINTER)

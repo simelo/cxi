@@ -562,12 +562,12 @@ func checkCXPathSet () {
 }
 
 func addInitFunction (PRGRM *CXProgram) {
-	if main, err := PRGRM.GetPackage(MAIN_PKG); err == nil {
-		initFn := MakeFunction(SYS_INIT_FUNC)
+	if main, err := PRGRM.GetPackage(MainPkg); err == nil {
+		initFn := MakeFunction(SysInitFunc)
 		main.AddFunction(initFn)
 
 		FunctionDeclaration(initFn, nil, nil, SysInitExprs)
-		PRGRM.SelectFunction(MAIN_FUNC)
+		PRGRM.SelectFunction(MainFunc)
 	} else {
 		panic(err)
 }
@@ -920,17 +920,17 @@ func main () {
 
 	PRGRM = cxgo0.PRGRM0
 	if FoundCompileErrors || parseErrors > 0 {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
-	if osPkg, err := PRGRM.GetPackage(OS_PKG); err == nil {
+	if osPkg, err := PRGRM.GetPackage(OsPkg); err == nil {
 
-		arg0 := MakeArgument(OS_ARGS, "", -1).AddType(TypeNames[TYPE_UNDEFINED])
+		arg0 := MakeArgument(OsArgs, "", -1).AddType(TypeNames[TypeUndefined])
 		arg0.Package = osPkg
 
-		arg1 := MakeArgument(OS_ARGS, "", -1).AddType(TypeNames[TYPE_STR])
-		arg1 = DeclarationSpecifiers(arg1, 0, DECL_BASIC)
-		arg1 = DeclarationSpecifiers(arg1, 0, DECL_SLICE)
+		arg1 := MakeArgument(OsArgs, "", -1).AddType(TypeNames[TypeStr])
+		arg1 = DeclarationSpecifiers(arg1, 0, DeclBasic)
+		arg1 = DeclarationSpecifiers(arg1, 0, DeclSlice)
 
 
 		DeclareGlobalInPackage(osPkg, arg0, arg1, nil, false)
@@ -948,19 +948,19 @@ func main () {
 	}
 
 	if FoundCompileErrors || parseErrors > 0 {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
 	if len(sourceCode) == 0 {
-		mod := MakePackage(MAIN_PKG)
+		mod := MakePackage(MainPkg)
 		PRGRM.AddPackage(mod)
-		fn := MakeFunction(MAIN_FUNC)
+		fn := MakeFunction(SysInitFunc)
 		mod.AddFunction(fn)
 
-		ReplTargetFn = MAIN_FUNC
+		ReplTargetFn = SysInitFunc
 	} else {
-		if _, err := PRGRM.GetFunction(MAIN_FUNC, MAIN_PKG); err == nil {
-			ReplTargetFn = MAIN_FUNC
+		if _, err := PRGRM.GetFunction(SysInitFunc, MainPkg); err == nil {
+			ReplTargetFn = SysInitFunc
 		} else {
 			// then it's a library, not an app
 		}
@@ -972,7 +972,7 @@ func main () {
 	LineNo = 0
 
 	if FoundCompileErrors {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
 	if ReplMode || len(sourceCode) == 0 {
@@ -989,7 +989,7 @@ func main () {
 				// repl()
 			}
 			if AssertFailed() {
-				os.Exit(CX_ASSERT)
+				os.Exit(CxAssert)
 			}
 		}
 	}

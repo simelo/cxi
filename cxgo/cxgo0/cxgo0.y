@@ -16,7 +16,7 @@
 	var inFn bool = false
 	var fileName string
 
-	// var DataOffset0 int = STACK_SIZE + TYPE_POINTER_SIZE // to be able to handle nil pointers
+	// var DataOffset0 int = StackSize + TypePointerSize // to be able to handle nil pointers
 
 	// func WritePrimary0 (typ int, byts []byte, isGlobal bool) []*CXExpression {
 	// 	if pkg, err := PRGRM0.GetCurrentPackage(); err == nil {
@@ -33,10 +33,10 @@
 	// 		arg.TotalSize = size
 	// 		arg.Offset = DataOffset0
 
-	// 		if arg.Type == TYPE_STR {
-	// 			arg.PassBy = PASSBY_REFERENCE
-	// 			arg.Size = TYPE_POINTER_SIZE
-	// 			arg.TotalSize = TYPE_POINTER_SIZE
+	// 		if arg.Type == TypeStr {
+	// 			arg.PassBy = PassbyReference
+	// 			arg.Size = TypePointerSize
+	// 			arg.TotalSize = TypePointerSize
 	// 		}
 
 	// 		for i, byt := range byts {
@@ -434,7 +434,7 @@ direct_declarator:
                 {
 			if pkg, err := PRGRM0.GetCurrentPackage(); err == nil {
 				arg := MakeArgument("", CurrentFile, LineNo)
-				arg.AddType(TypeNames[TYPE_UNDEFINED])
+				arg.AddType(TypeNames[TypeUndefined])
 				arg.Name = $1
 				arg.Package = pkg
 				$$ = arg
@@ -450,13 +450,13 @@ direct_declarator:
 declaration_specifiers:
                 MUL_OP declaration_specifiers
                 {
-			$$ = DeclarationSpecifiers($2, 0, DECL_POINTER)
-			// $2.DeclarationSpecifiers = append($2.DeclarationSpecifiers, DECL_POINTER)
+			$$ = DeclarationSpecifiers($2, 0, DeclPointer)
+			// $2.DeclarationSpecifiers = append($2.DeclarationSpecifiers, DeclPointer)
 			// if !$2.IsPointer {
 			// 	$2.IsPointer = true
 			// 	$2.PointeeSize = $2.Size
-			// 	$2.Size = TYPE_POINTER_SIZE
-			// 	$2.TotalSize = TYPE_POINTER_SIZE
+			// 	$2.Size = TypePointerSize
+			// 	$2.TotalSize = TypePointerSize
 			// 	$2.IndirectionLevels++
 			// } else {
 			// 	pointer := $2
@@ -475,9 +475,9 @@ declaration_specifiers:
 
 			// 	$2.IndirectionLevels++
 
-			// 	// pointer.Type = TYPE_POINTER
-			// 	pointer.Size = TYPE_POINTER_SIZE
-			// 	pointer.TotalSize = TYPE_POINTER_SIZE
+			// 	// pointer.Type = TypePointer
+			// 	pointer.Size = TypePointerSize
+			// 	pointer.TotalSize = TypePointerSize
 			// 	pointer.Pointee = pointee
 			// }
 
@@ -486,22 +486,22 @@ declaration_specifiers:
         |       LBRACK INT_LITERAL RBRACK declaration_specifiers
                 {
 			
-			$$ = DeclarationSpecifiers($4, int($2), DECL_ARRAY)
-			// $3.DeclarationSpecifiers = append($3.DeclarationSpecifiers, DECL_SLICE)
+			$$ = DeclarationSpecifiers($4, int($2), DeclArray)
+			// $3.DeclarationSpecifiers = append($3.DeclarationSpecifiers, DeclSlice)
 			// arg := $3
                         // arg.IsArray = true
 			// arg.IsSlice = true
 			// arg.IsReference = true
-			// arg.PassBy = PASSBY_REFERENCE
+			// arg.PassBy = PassbyReference
 			// arg.Lengths = append([]int{0}, arg.Lengths...)
 			// arg.TotalSize = arg.Size
-			// arg.Size = TYPE_POINTER_SIZE
+			// arg.Size = TypePointerSize
 			// $$ = arg
                 }
         |       LBRACK RBRACK declaration_specifiers
                 {
-			$$ = DeclarationSpecifiers($3, 0, DECL_SLICE)
-			// $4.DeclarationSpecifiers = append($4.DeclarationSpecifiers, DECL_ARRAY)
+			$$ = DeclarationSpecifiers($3, 0, DeclSlice)
+			// $4.DeclarationSpecifiers = append($4.DeclarationSpecifiers, DeclArray)
 			// arg := $4
                         // arg.IsArray = true
 			// arg.Lengths = append([]int{int($2)}, arg.Lengths...)
@@ -513,14 +513,14 @@ declaration_specifiers:
 			$$ = DeclarationSpecifiersBasic($1)
 			// arg := MakeArgument("", CurrentFile, LineNo)
 			// arg.AddType(TypeNames[$1])
-			// arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_BASIC)
+			// arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclBasic)
 
 			// arg.Type = $1
 			// arg.Size = GetArgSize($1)
 			// arg.TotalSize = arg.Size
 
-			// if $1 == TYPE_STR {
-			// 	fld := DeclarationSpecifiers(arg, 0, DECL_POINTER)
+			// if $1 == TypeStr {
+			// 	fld := DeclarationSpecifiers(arg, 0, DeclPointer)
 			// 	$$ = fld
 			// } else {
 			// 	$$ = arg
@@ -533,8 +533,8 @@ declaration_specifiers:
 			// if pkg, err := PRGRM0.GetCurrentPackage(); err == nil {
 			// 	if strct, err := PRGRM0.GetStruct($1, pkg.Name); err == nil {
 			// 		arg := MakeArgument("", CurrentFile, LineNo)
-			// 		arg.AddType(TypeNames[TYPE_CUSTOM])
-			// 		arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_STRUCT)
+			// 		arg.AddType(TypeNames[TypeCustom])
+			// 		arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclStruct)
 			// 		arg.CustomType = strct
 			// 		arg.Size = strct.Size
 			// 		arg.TotalSize = strct.Size
@@ -558,14 +558,14 @@ declaration_specifiers:
 			// 	if imp, err := pkg.GetImport($1); err == nil {
 			// 		if strct, err := PRGRM0.GetStruct($3, imp.Name); err == nil {
 			// 			arg := MakeArgument("", CurrentFile, LineNo)
-			// 			arg.AddType(TypeNames[TYPE_CUSTOM])
+			// 			arg.AddType(TypeNames[TypeCustom])
 			// 			arg.CustomType = strct
 			// 			arg.Size = strct.Size
 			// 			arg.TotalSize = strct.Size
 
 			// 			arg.Package = pkg
 
-			// 			arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_STRUCT)
+			// 			arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclStruct)
 
 			// 			$$ = arg
 			// 		} else {
@@ -580,7 +580,7 @@ declaration_specifiers:
 			
 			// if pkg, err := PRGRM0.GetPackage($1); err == nil {
 			// 	if strct, err := PRGRM0.GetStruct($3, pkg.Name); err == nil {
-			// 		arg := MakeArgument(TYPE_CUSTOM, CurrentFile, LineNo)
+			// 		arg := MakeArgument(TypeCustom, CurrentFile, LineNo)
 			// 		arg.CustomType = strct
 			// 		arg.Size = strct.Size
 			// 		arg.TotalSize = strct.Size
@@ -605,33 +605,33 @@ declaration_specifiers:
 
 type_specifier:
                 AFF
-                { $$ = TYPE_AFF }
+                { $$ = TypeAff }
         |       BOOL
-                { $$ = TYPE_BOOL }
+                { $$ = TypeBool }
         |       BYTE
-                { $$ = TYPE_BYTE }
+                { $$ = TypeByte }
         |       STR
-                { $$ = TYPE_STR }
+                { $$ = TypeStr }
         |       F32
-                { $$ = TYPE_F32 }
+                { $$ = TypeF32 }
         |       F64
-                { $$ = TYPE_F64 }
+                { $$ = TypeF64 }
         |       I8
-                { $$ = TYPE_I8 }
+                { $$ = TypeI8 }
         |       I16
-                { $$ = TYPE_I16 }
+                { $$ = TypeI16 }
         |       I32
-                { $$ = TYPE_I32 }
+                { $$ = TypeI32 }
         |       I64
-                { $$ = TYPE_I64 }
+                { $$ = TypeI64 }
         |       UI8
-                { $$ = TYPE_UI8 }
+                { $$ = TypeUI8 }
         |       UI16
-                { $$ = TYPE_UI16 }
+                { $$ = TypeUI16 }
         |       UI32
-                { $$ = TYPE_UI32 }
+                { $$ = TypeUI32 }
         |       UI64
-                { $$ = TYPE_UI64 }
+                { $$ = TypeUI64 }
 	/* |       struct_or_union_specifier */
         /*         { */
         /*             $$ = "struct" */

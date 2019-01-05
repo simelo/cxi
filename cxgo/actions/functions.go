@@ -84,8 +84,8 @@ func FunctionDeclaration(fn *CXFunction, inputs, outputs []*CXArgument, exprs []
 
 	fn.Length = len(fn.Expressions)
 
-	var symbols map[string]*CXArgument = make(map[string]*CXArgument, 0)
-	var symbolsScope map[string]bool = make(map[string]bool, 0)
+	var symbols = make(map[string]*CXArgument, 0)
+	var symbolsScope = make(map[string]bool, 0)
 
 	FunctionProcessParameters(&symbols, &symbolsScope, &offset, fn, fn.Inputs)
 	FunctionProcessParameters(&symbols, &symbolsScope, &offset, fn, fn.Outputs)
@@ -334,12 +334,12 @@ func CheckTypes(expr *CXExpression) {
 		// checking if number of inputs is less than the required number of inputs
 		if len(expr.Inputs) != len(expr.Operator.Inputs) {
 			if !(len(expr.Operator.Inputs) > 0 && expr.Operator.Inputs[len(expr.Operator.Inputs)-1].Type != TypeUndefined) {
-				// if the last input is of type TYPE_UNDEFINED then it might be a variadic function, such as printf
+				// if the last input is of type TypeUndefined then it might be a variadic function, such as printf
 			} else {
 				// then we need to be strict in the number of inputs
 				var plural1 string
-				var plural2 string = "s"
-				var plural3 string = "were"
+				var plural2 = "s"
+				var plural3 = "were"
 				if len(expr.Operator.Inputs) > 1 {
 					plural1 = "s"
 				}
@@ -356,8 +356,8 @@ func CheckTypes(expr *CXExpression) {
 		// checking if number of expr.Outputs match number of Operator.Outputs
 		if len(expr.Outputs) != len(expr.Operator.Outputs) {
 			var plural1 string
-			var plural2 string = "s"
-			var plural3 string = "were"
+			var plural2 = "s"
+			var plural3 = "were"
 			if len(expr.Operator.Outputs) > 1 {
 				plural1 = "s"
 			}
@@ -370,7 +370,7 @@ func CheckTypes(expr *CXExpression) {
 	}
 
 	if expr.Operator != nil && expr.Operator.IsNative && expr.Operator.OpCode == OP_IDENTITY {
-		for i, _ := range expr.Inputs {
+		for i := range expr.Inputs {
 			var expectedType string
 			var receivedType string
 			if GetAssignmentElement(expr.Outputs[i]).CustomType != nil {
@@ -423,7 +423,7 @@ func CheckTypes(expr *CXExpression) {
 				receivedType = TypeNames[GetAssignmentElement(expr.Inputs[i]).Type]
 			}
 
-			// if inp.Type != expr.Inputs[i].Type && inp.Type != TYPE_UNDEFINED {
+			// if inp.Type != expr.Inputs[i].Type && inp.Type != TypeUndefined {
 			if expectedType != receivedType && inp.Type != TypeUndefined {
 				var opName string
 				if expr.Operator.IsNative {
@@ -763,8 +763,8 @@ func ProcessSymbolFields(sym *CXArgument, arg *CXArgument) {
 
 					if fld.Type == TypeStr || fld.Type == TypeAff {
 						nameFld.PassBy = PassbyReference
-						// nameFld.Size = TYPE_POINTER_SIZE
-						// nameFld.TotalSize = TYPE_POINTER_SIZE
+						// nameFld.Size = TypePOINTER_SIZE
+						// nameFld.TotalSize = TypePOINTER_SIZE
 					}
 
 					if fld.CustomType != nil {
@@ -780,7 +780,7 @@ func ProcessSymbolFields(sym *CXArgument, arg *CXArgument) {
 }
 
 func SetFinalSize(symbols *map[string]*CXArgument, sym *CXArgument) {
-	var finalSize int = sym.TotalSize
+	var finalSize = int(sym.TotalSize)
 
 	if arg, found := (*symbols)[sym.Package.Name+"."+sym.Name]; found {
 		PreFinalSize(&finalSize, sym, arg)
@@ -807,7 +807,7 @@ func PreFinalSize(finalSize *int, sym *CXArgument, arg *CXArgument) {
 			if GetAssignmentElement(sym).IsSlice {
 				continue
 			}
-			var subSize int = 1
+			var subSize = int(1)
 
 			for _, len := range GetAssignmentElement(sym).Lengths[:len(GetAssignmentElement(sym).Indexes)] {
 				subSize *= len
@@ -823,8 +823,8 @@ func PreFinalSize(finalSize *int, sym *CXArgument, arg *CXArgument) {
 						for _, len := range arg.Lengths {
 							subSize *= len
 						}
-					// case DECL_SLICE:
-					// 	subSize = TYPE_POINTER_SIZE
+					// case DeclSlice:
+					// 	subSize = TypePOINTER_SIZE
 					case DeclBasic:
 						subSize = GetArgSize(sym.Type)
 					case DeclStruct:
