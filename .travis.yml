@@ -27,6 +27,7 @@ install:
   - cd $GOPATH/src/github.com/skycoin/cx
   - make install
   - make install-linters
+  - go get golang.org/x/tools/cmd/goimports
 
 # Build, test & run cx test
 script:

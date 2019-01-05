@@ -954,13 +954,13 @@ func main () {
 	if len(sourceCode) == 0 {
 		mod := MakePackage(MainPkg)
 		PRGRM.AddPackage(mod)
-		fn := MakeFunction(SysInitFunc)
+		fn := MakeFunction(MainFunc)
 		mod.AddFunction(fn)
 
-		ReplTargetFn = SysInitFunc
+		ReplTargetFn = MainFunc
 	} else {
-		if _, err := PRGRM.GetFunction(SysInitFunc, MainPkg); err == nil {
-			ReplTargetFn = SysInitFunc
+		if _, err := PRGRM.GetFunction(MainFunc, MainPkg); err == nil {
+			ReplTargetFn = MainFunc
 		} else {
 			// then it's a library, not an app
 		}
