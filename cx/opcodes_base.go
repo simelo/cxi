@@ -33,19 +33,19 @@ var execNativeBase func(*CXProgram)
 
 func init() {
 	// time
-	AddOpCode(OP_TIME_SLEEP, "time.Sleep", []int{TYPE_I32}, []int{})
-	AddOpCode(OP_TIME_UNIX_MILLI, "time.UnixMilli", []int{}, []int{TYPE_I64})
-	AddOpCode(OP_TIME_UNIX_NANO, "time.UnixNano", []int{}, []int{TYPE_I64})
+	AddOpCode(OP_TIME_SLEEP, "time.Sleep", []int{TypeI32}, []int{})
+	AddOpCode(OP_TIME_UNIX_MILLI, "time.UnixMilli", []int{}, []int{TypeI64})
+	AddOpCode(OP_TIME_UNIX_NANO, "time.UnixNano", []int{}, []int{TypeI64})
 
 	// http
-	AddOpCode(OP_HTTP_GET, "http.Get", []int{TYPE_STR}, []int{TYPE_STR})
+	AddOpCode(OP_HTTP_GET, "http.Get", []int{TypeStr}, []int{TypeStr})
 
 	// os
-	AddOpCode(OP_OS_GET_WORKING_DIRECTORY, "os.GetWorkingDirectory", []int{}, []int{TYPE_STR})
-	AddOpCode(OP_OS_OPEN, "os.Open", []int{TYPE_STR}, []int{})
-	AddOpCode(OP_OS_CLOSE, "os.Close", []int{TYPE_STR}, []int{})
-	AddOpCode(OP_OS_RUN, "os.Run", []int{TYPE_STR, TYPE_I32, TYPE_I32, TYPE_STR}, []int{TYPE_I32, TYPE_I32, TYPE_STR})
-	AddOpCode(OP_OS_EXIT, "os.Exit", []int{TYPE_I32}, []int{})
+	AddOpCode(OP_OS_GET_WORKING_DIRECTORY, "os.GetWorkingDirectory", []int{}, []int{TypeStr})
+	AddOpCode(OP_OS_OPEN, "os.Open", []int{TypeStr}, []int{})
+	AddOpCode(OP_OS_CLOSE, "os.Close", []int{TypeStr}, []int{})
+	AddOpCode(OP_OS_RUN, "os.Run", []int{TypeStr, TypeI32, TypeI32, TypeStr}, []int{TypeI32, TypeI32, TypeStr})
+	AddOpCode(OP_OS_EXIT, "os.Exit", []int{TypeI32}, []int{})
 
 	// exec
 	execNativeBase = func(prgrm *CXProgram) {

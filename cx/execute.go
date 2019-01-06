@@ -68,8 +68,8 @@ func (cxt *CXProgram) Run(untilEnd bool, nCalls *int, untilCall int) error {
 		call := &cxt.CallStack[cxt.CallCounter]
 
 		// checking if enough memory in stack
-		if cxt.StackPointer > STACK_SIZE {
-			panic(STACK_OVERFLOW_ERROR)
+		if cxt.StackPointer > StackSize {
+			panic(StackOverflowError)
 		}
 
 		if !untilEnd {
@@ -135,14 +135,14 @@ func (cxt *CXProgram) RunCompiled(nCalls int, args []string) error {
 	if nCalls == 0 {
 		untilEnd = true
 	}
-	mod, err := cxt.SelectPackage(MAIN_PKG)
+	mod, err := cxt.SelectPackage(MainPkg)
 	if err == nil {
 		// initializing program resources
 		// prgrm.Stacks = append(prgrm.Stacks, MakeStack(1024))
 
 		if cxt.CallStack[0].Operator == nil {
 			// then the program is just starting and we need to run the SYS_INIT_FUNC
-			if fn, err := mod.SelectFunction(SYS_INIT_FUNC); err == nil {
+			if fn, err := mod.SelectFunction(SysInitFunc); err == nil {
 				// *init function
 				mainCall := MakeCall(fn)
 				cxt.CallStack[0] = mainCall
@@ -166,7 +166,7 @@ func (cxt *CXProgram) RunCompiled(nCalls int, args []string) error {
 			}
 		}
 
-		if fn, err := mod.SelectFunction(MAIN_FUNC); err == nil {
+		if fn, err := mod.SelectFunction(MainFunc); err == nil {
 			if len(fn.Expressions) < 1 {
 				return nil
 			}
@@ -182,9 +182,9 @@ func (cxt *CXProgram) RunCompiled(nCalls int, args []string) error {
 				cxt.StackPointer += fn.Size
 
 				// feeding os.Args
-				if osPkg, err := PROGRAM.SelectPackage(OS_PKG); err == nil {
+				if osPkg, err := PROGRAM.SelectPackage(OsPkg); err == nil {
 					argsOffset := 0
-					if osGbl, err := osPkg.GetGlobal(OS_ARGS); err == nil {
+					if osGbl, err := osPkg.GetGlobal(OsArgs); err == nil {
 						for _, arg := range args {
 							argBytes := encoder.Serialize(arg)
 							argOffset := AllocateSeq(len(argBytes))
@@ -245,7 +245,7 @@ func (cxt *CXProgram) ccallback(expr *CXExpression, functionName string, package
 
 		var nCalls = 0
 		if err := cxt.Run(true, &nCalls, previousCall); err != nil {
-			os.Exit(CX_INTERNAL_ERROR)
+			os.Exit(CxInternalError)
 		}
 
 		cxt.CallCounter = previousCall
@@ -320,8 +320,8 @@ func (call *CXCall) ccall(prgrm *CXProgram) error {
 			prgrm.StackPointer += newCall.Operator.Size
 
 			// checking if enough memory in stack
-			if prgrm.StackPointer > STACK_SIZE {
-				panic(STACK_OVERFLOW_ERROR)
+			if prgrm.StackPointer > StackSize {
+				panic(StackOverflowError)
 			}
 
 			fp := call.FramePointer
@@ -341,7 +341,7 @@ func (call *CXCall) ccall(prgrm *CXProgram) error {
 				// if inp.Indexes != nil {
 				// 	finalOffset = GetFinalOffset(&prgrm.Stacks[0], fp, inp)
 				// }
-				if inp.PassBy == PASSBY_REFERENCE {
+				if inp.PassBy == PassbyReference {
 					byts = encoder.Serialize(int32(finalOffset))
 				} else {
 					byts = prgrm.Memory[finalOffset : finalOffset+inp.TotalSize]

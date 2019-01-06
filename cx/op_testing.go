@@ -17,7 +17,7 @@ func assert(expr *CXExpression, fp int) (same bool) {
 	inp1, inp2, inp3 := expr.Inputs[0], expr.Inputs[1], expr.Inputs[2]
 	var byts1, byts2 []byte
 
-	if inp1.Type == TYPE_STR {
+	if inp1.Type == TypeStr {
 		byts1 = []byte(ReadStr(fp, inp1))
 		byts2 = []byte(ReadStr(fp, inp2))
 	} else {
@@ -70,6 +70,6 @@ func opTest(expr *CXExpression, fp int) {
 
 func opPanic(expr *CXExpression, fp int) {
 	if assert(expr, fp) == false {
-		os.Exit(CX_ASSERT)
+		os.Exit(CxAssert)
 	}
 }

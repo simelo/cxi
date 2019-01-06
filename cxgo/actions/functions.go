@@ -2,6 +2,7 @@ package actions
 
 import (
 	"fmt"
+
 	. "github.com/skycoin/cx/cx"
 )
 
@@ -62,7 +63,7 @@ func FunctionAddParameters(fn *CXFunction, inputs, outputs []*CXArgument) {
 	}
 
 	for _, out := range fn.Outputs {
-		if out.IsPointer && out.Type != TYPE_STR && out.Type != TYPE_AFF {
+		if out.IsPointer && out.Type != TypeStr && out.Type != TypeAff {
 			out.DoesEscape = true
 		}
 	}
@@ -83,8 +84,8 @@ func FunctionDeclaration(fn *CXFunction, inputs, outputs []*CXArgument, exprs []
 
 	fn.Length = len(fn.Expressions)
 
-	var symbols map[string]*CXArgument = make(map[string]*CXArgument, 0)
-	var symbolsScope map[string]bool = make(map[string]bool, 0)
+	var symbols = make(map[string]*CXArgument, 0)
+	var symbolsScope = make(map[string]bool, 0)
 
 	FunctionProcessParameters(&symbols, &symbolsScope, &offset, fn, fn.Inputs)
 	FunctionProcessParameters(&symbols, &symbolsScope, &offset, fn, fn.Outputs)
@@ -147,9 +148,9 @@ func FunctionCall(exprs []*CXExpression, args []*CXExpression) []*CXExpression {
 			if len(inpExpr.Outputs) < 1 {
 				var out *CXArgument
 
-				if inpExpr.Operator.Outputs[0].Type == TYPE_UNDEFINED {
+				if inpExpr.Operator.Outputs[0].Type == TypeUndefined {
 					// if undefined type, then adopt argument's type
-					out = MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, inpExpr.FileLine).AddType(TypeNames[inpExpr.Inputs[0].Type])
+					out = MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, inpExpr.FileLine).AddType(TypeNames[inpExpr.Inputs[0].Type])
 					out.CustomType = inpExpr.Inputs[0].CustomType
 
 					out.Size = inpExpr.Inputs[0].Size
@@ -158,7 +159,7 @@ func FunctionCall(exprs []*CXExpression, args []*CXExpression) []*CXExpression {
 					out.Type = inpExpr.Inputs[0].Type
 					out.PreviouslyDeclared = true
 				} else {
-					out = MakeArgument(MakeGenSym(LOCAL_PREFIX), CurrentFile, inpExpr.FileLine).AddType(TypeNames[inpExpr.Operator.Outputs[0].Type])
+					out = MakeArgument(MakeGenSym(LocalPrefix), CurrentFile, inpExpr.FileLine).AddType(TypeNames[inpExpr.Operator.Outputs[0].Type])
 
 					out.CustomType = inpExpr.Operator.Outputs[0].CustomType
 
@@ -215,7 +216,7 @@ func ProcessPointerStructs(expr *CXExpression) {
 	for _, arg := range append(expr.Inputs, expr.Outputs...) {
 		if arg.IsStruct && arg.IsPointer && len(arg.Fields) > 0 && arg.DereferenceLevels == 0 {
 			arg.DereferenceLevels++
-			arg.DereferenceOperations = append(arg.DereferenceOperations, DEREF_POINTER)
+			arg.DereferenceOperations = append(arg.DereferenceOperations, DerefPointer)
 		}
 	}
 }
@@ -332,13 +333,13 @@ func CheckTypes(expr *CXExpression) {
 
 		// checking if number of inputs is less than the required number of inputs
 		if len(expr.Inputs) != len(expr.Operator.Inputs) {
-			if !(len(expr.Operator.Inputs) > 0 && expr.Operator.Inputs[len(expr.Operator.Inputs)-1].Type != TYPE_UNDEFINED) {
-				// if the last input is of type TYPE_UNDEFINED then it might be a variadic function, such as printf
+			if !(len(expr.Operator.Inputs) > 0 && expr.Operator.Inputs[len(expr.Operator.Inputs)-1].Type != TypeUndefined) {
+				// if the last input is of type TypeUndefined then it might be a variadic function, such as printf
 			} else {
 				// then we need to be strict in the number of inputs
 				var plural1 string
-				var plural2 string = "s"
-				var plural3 string = "were"
+				var plural2 = "s"
+				var plural3 = "were"
 				if len(expr.Operator.Inputs) > 1 {
 					plural1 = "s"
 				}
@@ -355,8 +356,8 @@ func CheckTypes(expr *CXExpression) {
 		// checking if number of expr.Outputs match number of Operator.Outputs
 		if len(expr.Outputs) != len(expr.Operator.Outputs) {
 			var plural1 string
-			var plural2 string = "s"
-			var plural3 string = "were"
+			var plural2 = "s"
+			var plural3 = "were"
 			if len(expr.Operator.Outputs) > 1 {
 				plural1 = "s"
 			}
@@ -369,7 +370,7 @@ func CheckTypes(expr *CXExpression) {
 	}
 
 	if expr.Operator != nil && expr.Operator.IsNative && expr.Operator.OpCode == OP_IDENTITY {
-		for i, _ := range expr.Inputs {
+		for i := range expr.Inputs {
 			var expectedType string
 			var receivedType string
 			if GetAssignmentElement(expr.Outputs[i]).CustomType != nil {
@@ -422,8 +423,8 @@ func CheckTypes(expr *CXExpression) {
 				receivedType = TypeNames[GetAssignmentElement(expr.Inputs[i]).Type]
 			}
 
-			// if inp.Type != expr.Inputs[i].Type && inp.Type != TYPE_UNDEFINED {
-			if expectedType != receivedType && inp.Type != TYPE_UNDEFINED {
+			// if inp.Type != expr.Inputs[i].Type && inp.Type != TypeUndefined {
+			if expectedType != receivedType && inp.Type != TypeUndefined {
 				var opName string
 				if expr.Operator.IsNative {
 					opName = OpNames[expr.Operator.OpCode]
@@ -444,9 +445,9 @@ func ProcessStringAssignment(expr *CXExpression) {
 				out = GetAssignmentElement(out)
 				inp := GetAssignmentElement(expr.Inputs[i])
 
-				if (out.Type == TYPE_STR || out.Type == TYPE_AFF) && out.Name != "" &&
-					(inp.Type == TYPE_STR || inp.Type == TYPE_AFF) && inp.Name != "" {
-					out.PassBy = PASSBY_VALUE
+				if (out.Type == TypeStr || out.Type == TypeAff) && out.Name != "" &&
+					(inp.Type == TypeStr || inp.Type == TypeAff) && inp.Name != "" {
+					out.PassBy = PassbyValue
 				}
 			}
 		}
@@ -464,7 +465,7 @@ func ProcessSlice(inp *CXArgument) {
 
 	// elt.IsPointer = true
 
-	if elt.IsSlice && len(elt.DereferenceOperations) > 0 && elt.DereferenceOperations[len(elt.DereferenceOperations)-1] == DEREF_POINTER {
+	if elt.IsSlice && len(elt.DereferenceOperations) > 0 && elt.DereferenceOperations[len(elt.DereferenceOperations)-1] == DerefPointer {
 		elt.DereferenceOperations = elt.DereferenceOperations[:len(elt.DereferenceOperations)-1]
 	} else if elt.IsSlice && len(elt.DereferenceOperations) > 0 && len(inp.Fields) == 0 {
 		// elt.DereferenceOperations = append([]int{DEREF_POINTER}, elt.DereferenceOperations...)
@@ -480,7 +481,7 @@ func ProcessSliceAssignment(expr *CXExpression) {
 		out = GetAssignmentElement(expr.Outputs[0])
 
 		if inp.IsSlice && out.IsSlice && len(inp.Indexes) == 0 && len(out.Indexes) == 0 {
-			out.PassBy = PASSBY_VALUE
+			out.PassBy = PassbyValue
 		}
 	}
 	if expr.Operator != nil && !expr.Operator.IsNative {
@@ -489,7 +490,7 @@ func ProcessSliceAssignment(expr *CXExpression) {
 			assignElt := GetAssignmentElement(inp)
 
 			if assignElt.IsSlice && len(assignElt.Indexes) == 0 {
-				assignElt.PassBy = PASSBY_VALUE
+				assignElt.PassBy = PassbyValue
 			}
 		}
 	}
@@ -630,7 +631,7 @@ func ProcessMethodCall(expr *CXExpression, symbols *map[string]*CXArgument, offs
 
 		// checking if receiver is sent as pointer or not
 		if expr.Operator.Inputs[0].IsPointer {
-			expr.Inputs[0].PassBy = PASSBY_REFERENCE
+			expr.Inputs[0].PassBy = PassbyReference
 		}
 	}
 }
@@ -675,12 +676,12 @@ func CopyArgFields(sym *CXArgument, arg *CXArgument) {
 	sym.DoesEscape = arg.DoesEscape
 	sym.Size = arg.Size
 
-	if arg.Type == TYPE_STR {
+	if arg.Type == TypeStr {
 		sym.IsPointer = true
 	}
 
 	if arg.IsSlice {
-		sym.DereferenceOperations = append([]int{DEREF_POINTER}, sym.DereferenceOperations...)
+		sym.DereferenceOperations = append([]int{DerefPointer}, sym.DereferenceOperations...)
 		sym.DereferenceLevels++
 	}
 
@@ -753,17 +754,17 @@ func ProcessSymbolFields(sym *CXArgument, arg *CXArgument) {
 					// sym.DereferenceOperations = append(sym.DereferenceOperations, DEREF_FIELD)
 
 					if fld.IsSlice {
-						nameFld.DereferenceOperations = append([]int{DEREF_POINTER}, nameFld.DereferenceOperations...)
+						nameFld.DereferenceOperations = append([]int{DerefPointer}, nameFld.DereferenceOperations...)
 						nameFld.DereferenceLevels++
 					}
 
 					nameFld.PassBy = fld.PassBy
 					nameFld.IsSlice = fld.IsSlice
 
-					if fld.Type == TYPE_STR || fld.Type == TYPE_AFF {
-						nameFld.PassBy = PASSBY_REFERENCE
-						// nameFld.Size = TYPE_POINTER_SIZE
-						// nameFld.TotalSize = TYPE_POINTER_SIZE
+					if fld.Type == TypeStr || fld.Type == TypeAff {
+						nameFld.PassBy = PassbyReference
+						// nameFld.Size = TypePOINTER_SIZE
+						// nameFld.TotalSize = TypePOINTER_SIZE
 					}
 
 					if fld.CustomType != nil {
@@ -779,7 +780,7 @@ func ProcessSymbolFields(sym *CXArgument, arg *CXArgument) {
 }
 
 func SetFinalSize(symbols *map[string]*CXArgument, sym *CXArgument) {
-	var finalSize int = sym.TotalSize
+	var finalSize = int(sym.TotalSize)
 
 	if arg, found := (*symbols)[sym.Package.Name+"."+sym.Name]; found {
 		PreFinalSize(&finalSize, sym, arg)
@@ -802,31 +803,31 @@ func GetGlobalSymbol(symbols *map[string]*CXArgument, symPackage *CXPackage, sym
 func PreFinalSize(finalSize *int, sym *CXArgument, arg *CXArgument) {
 	for _, op := range sym.DereferenceOperations {
 		switch op {
-		case DEREF_ARRAY:
+		case DerefArray:
 			if GetAssignmentElement(sym).IsSlice {
 				continue
 			}
-			var subSize int = 1
+			var subSize = int(1)
 
 			for _, len := range GetAssignmentElement(sym).Lengths[:len(GetAssignmentElement(sym).Indexes)] {
 				subSize *= len
 			}
 			*finalSize /= subSize
-		case DEREF_POINTER:
+		case DerefPointer:
 			if len(arg.DeclarationSpecifiers) > 0 {
 				var subSize int
 				subSize = 1
 				for _, decl := range arg.DeclarationSpecifiers {
 					switch decl {
-					case DECL_ARRAY:
+					case DeclArray:
 						for _, len := range arg.Lengths {
 							subSize *= len
 						}
-					// case DECL_SLICE:
-					// 	subSize = TYPE_POINTER_SIZE
-					case DECL_BASIC:
+					// case DeclSlice:
+					// 	subSize = TypePOINTER_SIZE
+					case DeclBasic:
 						subSize = GetArgSize(sym.Type)
-					case DECL_STRUCT:
+					case DeclStruct:
 						subSize = arg.CustomType.Size
 					}
 				}

@@ -381,7 +381,7 @@ direct_declarator:
                 {
 			if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
 				arg := MakeArgument("", CurrentFile, LineNo)
-                                arg.AddType(TypeNames[TYPE_UNDEFINED])
+                                arg.AddType(TypeNames[TypeUndefined])
 				arg.Name = $1
 				arg.Package = pkg
 				$$ = arg
@@ -428,15 +428,15 @@ direct_declarator:
 declaration_specifiers:
                 MUL_OP declaration_specifiers
                 {
-			$$ = DeclarationSpecifiers($2, 0, DECL_POINTER)
+			$$ = DeclarationSpecifiers($2, 0, DerefPointer)
                 }
         |       LBRACK INT_LITERAL RBRACK declaration_specifiers
                 {
-			$$ = DeclarationSpecifiers($4, int($2), DECL_ARRAY)
+			$$ = DeclarationSpecifiers($4, int($2), DeclArray)
                 }
         |       LBRACK RBRACK declaration_specifiers
                 {
-			$$ = DeclarationSpecifiers($3, 0, DECL_SLICE)
+			$$ = DeclarationSpecifiers($3, 0, DeclSlice)
                 }
         |       type_specifier
                 {
@@ -466,33 +466,33 @@ declaration_specifiers:
 
 type_specifier:
                 AFF
-                { $$ = TYPE_AFF }
+                { $$ = TypeAff }
         |       BOOL
-                { $$ = TYPE_BOOL }
+                { $$ = TypeBool }
         |       BYTE
-                { $$ = TYPE_BYTE }
+                { $$ = TypeByte }
         |       STR
-                { $$ = TYPE_STR }
+                { $$ = TypeStr }
         |       F32
-                { $$ = TYPE_F32 }
+                { $$ = TypeF32 }
         |       F64
-                { $$ = TYPE_F64 }
+                { $$ = TypeF64 }
         |       I8
-                { $$ = TYPE_I8 }
+                { $$ = TypeI8 }
         |       I16
-                { $$ = TYPE_I16 }
+                { $$ = TypeI16 }
         |       I32
-                { $$ = TYPE_I32 }
+                { $$ = TypeI32 }
         |       I64
-                { $$ = TYPE_I64 }
+                { $$ = TypeI64 }
         |       UI8
-                { $$ = TYPE_UI8 }
+                { $$ = TypeUI8 }
         |       UI16
-                { $$ = TYPE_UI16 }
+                { $$ = TypeUI16 }
         |       UI32
-                { $$ = TYPE_UI32 }
+                { $$ = TypeUI32 }
         |       UI64
-                { $$ = TYPE_UI64 }
+                { $$ = TypeUI64 }
                 ;
 
 
@@ -702,30 +702,30 @@ infer_actions:
 
 infer_clauses:
                 {
-			$$ = SliceLiteralExpression(TYPE_AFF, nil)
+			$$ = SliceLiteralExpression(TypeAff, nil)
                 }
         |       infer_actions
                 {
 			var exprs []*CXExpression
 			for _, str := range $1 {
-				expr := WritePrimary(TYPE_AFF, encoder.Serialize(str), false)
+				expr := WritePrimary(TypeAff, encoder.Serialize(str), false)
 				expr[len(expr) - 1].IsArrayLiteral = true
 				exprs = append(exprs, expr...)
 			}
 			
-			$$ = SliceLiteralExpression(TYPE_AFF, exprs)
+			$$ = SliceLiteralExpression(TypeAff, exprs)
                 }
         /* |       infer_targets */
         /*         { */
 	/* 		var exprs []*CXExpression */
 	/* 		for _, str := range $1 { */
-	/* 			expr := WritePrimary(TYPE_AFF, encoder.Serialize(str), false) */
+	/* 			expr := WritePrimary(TypeAff, encoder.Serialize(str), false) */
 	/* 			expr[len(expr) - 1].IsArrayLiteral = true */
 	/* 			exprs = append(exprs, expr...) */
 	/* 		} */
 			
-	/* 		// $$ = ArrayLiteralExpression(len(exprs), TYPE_STR, exprs) */
-	/* 		$$ = SliceLiteralExpression(TYPE_AFF, exprs) */
+	/* 		// $$ = ArrayLiteralExpression(len(exprs), TypeStr, exprs) */
+	/* 		$$ = SliceLiteralExpression(TypeAff, exprs) */
         /*         } */
                 ;
 
@@ -751,32 +751,32 @@ primary_expression:
                 }
         |       STRING_LITERAL
                 {
-			$$ = WritePrimary(TYPE_STR, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeStr, encoder.Serialize($1), false)
                 }
         |       BOOLEAN_LITERAL
                 {
-			exprs := WritePrimary(TYPE_BOOL, encoder.Serialize($1), false)
+			exprs := WritePrimary(TypeBool, encoder.Serialize($1), false)
 			$$ = exprs
                 }
         |       BYTE_LITERAL
                 {
-			$$ = WritePrimary(TYPE_BYTE, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeByte, encoder.Serialize($1), false)
                 }
         |       INT_LITERAL
                 {
-			$$ = WritePrimary(TYPE_I32, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeI32, encoder.Serialize($1), false)
                 }
         |       FLOAT_LITERAL
                 {
-			$$ = WritePrimary(TYPE_F32, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeF32, encoder.Serialize($1), false)
                 }
         |       DOUBLE_LITERAL
                 {
-			$$ = WritePrimary(TYPE_F64, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeF64, encoder.Serialize($1), false)
                 }
         |       LONG_LITERAL
                 {
-			$$ = WritePrimary(TYPE_I64, encoder.Serialize($1), false)
+			$$ = WritePrimary(TypeI64, encoder.Serialize($1), false)
                 }
         |       LPAREN expression RPAREN
                 { $$ = $2 }
@@ -1248,8 +1248,8 @@ jump_statement: GOTO IDENTIFIER SEMICOLON
 				expr := MakeExpression(Natives[OP_JMP], CurrentFile, LineNo)
 
 				// simulating a label so it gets executed without evaluating a predicate
-				expr.Label = MakeGenSym(LABEL_PREFIX)
-				expr.ThenLines = MAX_INT32
+				expr.Label = MakeGenSym(LabelPrefix)
+				expr.ThenLines = MaxInt32
 				expr.Package = pkg
 
 				arg := MakeArgument("", CurrentFile, LineNo).AddType("bool")

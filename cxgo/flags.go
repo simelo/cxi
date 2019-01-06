@@ -150,7 +150,7 @@ func parseArgsForCX(args []string) (cxArgs []string, sourceCode []*os.File, file
 			sourceCode = append(sourceCode, file)
 		}
 	}
-	return
+	return nil, nil, nil
 }
 
 func printVersion() {

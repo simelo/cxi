@@ -45,8 +45,11 @@ build-parser: configure ## Generate lexer and parser for CX grammar
 	goyacc -o cxgo/cxgo.go cxgo/cxgo.y
 
 build: configure build-parser ## Build CX from sources
+	goimports -w ./cx
 	go build -tags full -i -o $(GOPATH)/bin/cx github.com/skycoin/cx/cxgo/
 	chmod +x $(GOPATH)/bin/cx
+	goimports -w $(shell find ./cxgo -type f -name '*.go' -not -name 'cxgo.go' -not -name 'cxgo.nn.go' -not -name 'cxgo0.go' -not -name 'cxgo0.nn.go')
+	
 
 install-deps-Linux:
 	echo 'Installing dependencies for $(UNAME_S)'
@@ -71,6 +74,7 @@ install-deps: configure $(INSTALL_DEPS)
 	go get github.com/go-gl/gltext
 	go get github.com/blynn/nex
 	go get github.com/cznic/goyacc
+	go get golang.org/x/tools/cmd/goimports
 #	go get github.com/skycoin/cx/...
 
 install: install-deps build configure-workspace ## Install CX from sources. Build dependencies
@@ -84,8 +88,9 @@ install-linters: ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 lint: ## Run linters. Use make install-linters first.
-	vendorcheck ./...
+#	vendorcheck ./...
 	golangci-lint run -c .golangci.yml ./cx
+	golangci-lint run -c .golangci.yml ./cxgo
 
 test: build ## Run CX test suite.
 	go test -race -tags full github.com/skycoin/cx/cxgo/
@@ -100,7 +105,8 @@ check-golden-files: update-golden-files ## Ensure golden files are up to date
 check: check-golden-files test ## Perform self-tests
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/cx ./cx
+	gofmt -w ./cx
+	gofmt -w $(shell find ./cxgo -type f -name '*.go' -not -name 'cxgo.go' -not -name 'cxgo.nn.go' -not -name 'cxgo0.go' -not -name 'cxgo0.nn.go')
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

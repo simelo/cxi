@@ -250,12 +250,12 @@ func DeclareLocal(declarator *CXArgument, declaration_specifiers *CXArgument, in
 
 func DeclarationSpecifiers(declSpec *CXArgument, arraySize int, opTyp int) *CXArgument {
 	switch opTyp {
-	case DECL_POINTER:
-		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DECL_POINTER)
+	case DeclPointer:
+		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DeclPointer)
 		if !declSpec.IsPointer {
 			declSpec.IsPointer = true
-			declSpec.Size = TYPE_POINTER_SIZE
-			declSpec.TotalSize = TYPE_POINTER_SIZE
+			declSpec.Size = TypePointerSize
+			declSpec.TotalSize = TypePointerSize
 			declSpec.IndirectionLevels++
 		} else {
 			pointer := declSpec
@@ -267,36 +267,36 @@ func DeclarationSpecifiers(declSpec *CXArgument, arraySize int, opTyp int) *CXAr
 
 			declSpec.IndirectionLevels++
 
-			pointer.Size = TYPE_POINTER_SIZE
-			pointer.TotalSize = TYPE_POINTER_SIZE
+			pointer.Size = TypePointerSize
+			pointer.TotalSize = TypePointerSize
 		}
 
 		return declSpec
-	case DECL_ARRAY:
-		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DECL_ARRAY)
+	case DeclArray:
+		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DeclArray)
 		arg := declSpec
 		arg.IsArray = true
 		arg.Lengths = append([]int{arraySize}, arg.Lengths...)
 		arg.TotalSize = arg.Size * TotalLength(arg.Lengths)
 
 		return arg
-	case DECL_SLICE:
-		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DECL_SLICE)
+	case DeclSlice:
+		declSpec.DeclarationSpecifiers = append(declSpec.DeclarationSpecifiers, DeclSlice)
 
 		arg := declSpec
 		arg.IsSlice = true
 		arg.IsReference = true
 		arg.IsArray = true
-		arg.PassBy = PASSBY_REFERENCE
+		arg.PassBy = PassbyReference
 
 		arg.Lengths = append([]int{0}, arg.Lengths...)
 		arg.TotalSize = arg.Size
-		arg.Size = TYPE_POINTER_SIZE
+		arg.Size = TypePointerSize
 
 		return arg
-	case DECL_BASIC:
+	case DeclBasic:
 		arg := declSpec
-		arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_BASIC)
+		arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclBasic)
 		arg.TotalSize = arg.Size
 		return arg
 	}
@@ -311,12 +311,12 @@ func DeclarationSpecifiersBasic(typ int) *CXArgument {
 
 	arg.Size = GetArgSize(typ)
 
-	if typ == TYPE_AFF {
+	if typ == TypeAff {
 		// equivalent to slice of strings
-		return DeclarationSpecifiers(arg, 0, DECL_SLICE)
+		return DeclarationSpecifiers(arg, 0, DeclSlice)
 	}
 
-	return DeclarationSpecifiers(arg, 0, DECL_BASIC)
+	return DeclarationSpecifiers(arg, 0, DeclBasic)
 }
 
 func DeclarationSpecifiersStruct(ident string, pkgName string, isExternal bool, currentFile string, lineNo int) *CXArgument {
@@ -326,13 +326,13 @@ func DeclarationSpecifiersStruct(ident string, pkgName string, isExternal bool, 
 			if imp, err := pkg.GetImport(pkgName); err == nil {
 				if strct, err := PRGRM.GetStruct(ident, imp.Name); err == nil {
 					arg := MakeArgument("", currentFile, lineNo)
-					arg.Type = TYPE_CUSTOM
+					arg.Type = TypeCustom
 					arg.CustomType = strct
 					arg.Size = strct.Size
 					arg.TotalSize = strct.Size
 
 					arg.Package = pkg
-					arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_STRUCT)
+					arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclStruct)
 
 					return arg
 				} else {
@@ -350,8 +350,8 @@ func DeclarationSpecifiersStruct(ident string, pkgName string, isExternal bool, 
 		if pkg, err := PRGRM.GetCurrentPackage(); err == nil {
 			if strct, err := PRGRM.GetStruct(ident, pkg.Name); err == nil {
 				arg := MakeArgument("", currentFile, lineNo)
-				arg.Type = TYPE_CUSTOM
-				arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DECL_STRUCT)
+				arg.Type = TypeCustom
+				arg.DeclarationSpecifiers = append(arg.DeclarationSpecifiers, DeclStruct)
 				arg.CustomType = strct
 				arg.Size = strct.Size
 				arg.TotalSize = strct.Size

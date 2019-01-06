@@ -13,33 +13,33 @@ func opStrStr(expr *CXExpression, fp int) {
 	out1Offset := GetFinalOffset(fp, out1)
 
 	switch out1.Type {
-	case TYPE_BYTE:
+	case TypeByte:
 		b, err := strconv.ParseInt(ReadStr(fp, inp1), 10, 8)
 		if err != nil {
 			panic("")
 		}
 		WriteMemory(out1Offset, encoder.Serialize(b))
-	case TYPE_STR:
+	case TypeStr:
 		WriteObject(out1Offset, []byte(ReadStr(fp, inp1)))
-	case TYPE_I32:
+	case TypeI32:
 		i, err := strconv.ParseInt(ReadStr(fp, inp1), 10, 32)
 		if err != nil {
 			panic("")
 		}
 		WriteMemory(out1Offset, encoder.SerializeAtomic(i))
-	case TYPE_I64:
+	case TypeI64:
 		l, err := strconv.ParseInt(ReadStr(fp, inp1), 10, 64)
 		if err != nil {
 			panic("")
 		}
 		WriteMemory(out1Offset, encoder.Serialize(l))
-	case TYPE_F32:
+	case TypeF32:
 		f, err := strconv.ParseFloat(ReadStr(fp, inp1), 32)
 		if err != nil {
 			panic("")
 		}
 		WriteMemory(out1Offset, encoder.Serialize(float32(f)))
-	case TYPE_F64:
+	case TypeF64:
 		d, err := strconv.ParseFloat(ReadStr(fp, inp1), 64)
 		if err != nil {
 			panic("")
@@ -63,10 +63,10 @@ func writeString(expr *CXExpression, fp int, str string, out *CXArgument) {
 
 	byts := encoder.Serialize(str)
 	size := encoder.Serialize(int32(len(byts)))
-	heapOffset := AllocateSeq(len(byts) + OBJECT_HEADER_SIZE)
+	heapOffset := AllocateSeq(len(byts) + ObjectHeaderSize)
 
-	var header = make([]byte, OBJECT_HEADER_SIZE)
-	for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+	var header = make([]byte, ObjectHeaderSize)
+	for c := 5; c < ObjectHeaderSize; c++ {
 		header[c] = size[c-5]
 	}
 
@@ -74,7 +74,7 @@ func writeString(expr *CXExpression, fp int, str string, out *CXArgument) {
 
 	WriteMemory(heapOffset, obj)
 
-	off := encoder.SerializeAtomic(int32(heapOffset + OBJECT_HEADER_SIZE))
+	off := encoder.SerializeAtomic(int32(heapOffset + ObjectHeaderSize))
 
 	WriteMemory(GetFinalOffset(fp, out), off)
 }

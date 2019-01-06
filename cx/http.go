@@ -44,11 +44,11 @@ func op_http_get(expr *CXExpression, fp int) {
 
 	byts := encoder.Serialize(string(contents))
 	length := len(byts)
-	heapOffset := AllocateSeq(length + OBJECT_HEADER_SIZE)
+	heapOffset := AllocateSeq(length + ObjectHeaderSize)
 	size := encoder.Serialize(int32(len(byts)))
 
-	var header []byte = make([]byte, OBJECT_HEADER_SIZE, OBJECT_HEADER_SIZE)
-	for c := 5; c < OBJECT_HEADER_SIZE; c++ {
+	var header []byte = make([]byte, ObjectHeaderSize, ObjectHeaderSize)
+	for c := 5; c < ObjectHeaderSize; c++ {
 		header[c] = size[c-5]
 	}
 

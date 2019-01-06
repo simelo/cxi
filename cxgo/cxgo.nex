@@ -562,12 +562,12 @@ func checkCXPathSet () {
 }
 
 func addInitFunction (PRGRM *CXProgram) {
-	if main, err := PRGRM.GetPackage(MAIN_PKG); err == nil {
-		initFn := MakeFunction(SYS_INIT_FUNC)
+	if main, err := PRGRM.GetPackage(MainPkg); err == nil {
+		initFn := MakeFunction(SysInitFunc)
 		main.AddFunction(initFn)
 
 		FunctionDeclaration(initFn, nil, nil, SysInitExprs)
-		PRGRM.SelectFunction(MAIN_FUNC)
+		PRGRM.SelectFunction(MainFunc)
 	} else {
 		panic(err)
 }
@@ -685,31 +685,31 @@ func main () {
 
 	var prePkg *CXPackage
 	parseErrors := 0
-	
+
 	if len(sourceCode) > 0 {
 		// we need to traverse the elements by hierarchy
 		// first add all the packages and structs at the same time
 		// then add globals, as these can be of a custom type (and it could be imported)
 		// the signatures of functions and methods are added in the cxgo0.y pass
-		
+
 		// identifying all the packages and structs first
 
 		reMultiCommentOpen := regexp.MustCompile(`/\*`)
 		reMultiCommentClose := regexp.MustCompile(`\*/`)
-		
+
 		for _, source := range sourceCodeCopy {
 			reader := strings.NewReader(source)
 			scanner := bufio.NewScanner(reader)
 			var commentedCode bool
 			for scanner.Scan() {
 				line := scanner.Bytes()
-				
+
 				rePkg := regexp.MustCompile("package")
 				reStrct := regexp.MustCompile("type")
-				
+
 				reComment := regexp.MustCompile("//")
 				commentLoc := reComment.FindIndex(line)
-				
+
 				multiCommentOpenLoc := reMultiCommentOpen.FindIndex(line)
 				multiCommentCloseLoc := reMultiCommentClose.FindIndex(line)
 
@@ -734,7 +734,7 @@ func main () {
 						continue
 					}
 
-					
+
 					rePkgName := regexp.MustCompile("(^|[\\s])package\\s+([_a-zA-Z][_a-zA-Z0-9]+)")
 
 					if match := rePkgName.FindStringSubmatch(string(line)); match != nil {
@@ -780,7 +780,7 @@ func main () {
 
 			for scanner.Scan() {
 				line := scanner.Bytes()
-				
+
 				rePkg := regexp.MustCompile("package")
 				reGlbl := regexp.MustCompile("var")
 
@@ -788,10 +788,10 @@ func main () {
 				// it'll also ignore struct declaration's bodies, but this doesn't matter
 				reBodyOpen := regexp.MustCompile("{")
 				reBodyClose := regexp.MustCompile("}")
-				
+
 				reComment := regexp.MustCompile("//")
 				commentLoc := reComment.FindIndex(line)
-				
+
 				multiCommentOpenLoc := reMultiCommentOpen.FindIndex(line)
 				multiCommentCloseLoc := reMultiCommentClose.FindIndex(line)
 
@@ -816,7 +816,7 @@ func main () {
 						// then it's commented out
 						continue
 					}
-					
+
 					rePkgName := regexp.MustCompile("(^|[\\s])package\\s+([_a-zA-Z][_a-zA-Z0-9]+)")
 
 					if match := rePkgName.FindStringSubmatch(string(line)); match != nil {
@@ -829,7 +829,7 @@ func main () {
 						}
 					}
 				}
-				
+
 				if locs := reBodyOpen.FindAllIndex(line, -1); locs != nil {
 					for _, loc := range locs {
 						if !(multiCommentCloseLoc != nil && multiCommentCloseLoc[0] > loc[0]) {
@@ -861,7 +861,7 @@ func main () {
 
 				// we could have this situation: {var local i32}
 				// but we don't care about this, as the later passes will throw an error as it's invalid syntax
-				
+
 				if loc := rePkg.FindIndex(line); loc != nil {
 					if (commentLoc != nil && commentLoc[0] < loc[0]) ||
 						(multiCommentOpenLoc != nil && multiCommentOpenLoc[0] < loc[0]) ||
@@ -869,7 +869,7 @@ func main () {
 						// then it's commented out
 						continue
 					}
-					
+
 					rePkgName := regexp.MustCompile("(^|[\\s])package\\s+([_a-zA-Z][_a-zA-Z0-9]+)")
 
 
@@ -920,17 +920,17 @@ func main () {
 
 	PRGRM = cxgo0.PRGRM0
 	if FoundCompileErrors || parseErrors > 0 {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
-	if osPkg, err := PRGRM.GetPackage(OS_PKG); err == nil {
+	if osPkg, err := PRGRM.GetPackage(OsPkg); err == nil {
 
-		arg0 := MakeArgument(OS_ARGS, "", -1).AddType(TypeNames[TYPE_UNDEFINED])
+		arg0 := MakeArgument(OsArgs, "", -1).AddType(TypeNames[TypeUndefined])
 		arg0.Package = osPkg
 
-		arg1 := MakeArgument(OS_ARGS, "", -1).AddType(TypeNames[TYPE_STR])
-		arg1 = DeclarationSpecifiers(arg1, 0, DECL_BASIC)
-		arg1 = DeclarationSpecifiers(arg1, 0, DECL_SLICE)
+		arg1 := MakeArgument(OsArgs, "", -1).AddType(TypeNames[TypeStr])
+		arg1 = DeclarationSpecifiers(arg1, 0, DeclBasic)
+		arg1 = DeclarationSpecifiers(arg1, 0, DeclSlice)
 
 
 		DeclareGlobalInPackage(osPkg, arg0, arg1, nil, false)
@@ -948,19 +948,19 @@ func main () {
 	}
 
 	if FoundCompileErrors || parseErrors > 0 {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
 	if len(sourceCode) == 0 {
-		mod := MakePackage(MAIN_PKG)
+		mod := MakePackage(MainPkg)
 		PRGRM.AddPackage(mod)
-		fn := MakeFunction(MAIN_FUNC)
+		fn := MakeFunction(MainFunc)
 		mod.AddFunction(fn)
 
-		ReplTargetFn = MAIN_FUNC
+		ReplTargetFn = MainFunc
 	} else {
-		if _, err := PRGRM.GetFunction(MAIN_FUNC, MAIN_PKG); err == nil {
-			ReplTargetFn = MAIN_FUNC
+		if _, err := PRGRM.GetFunction(MainFunc, MainPkg); err == nil {
+			ReplTargetFn = MainFunc
 		} else {
 			// then it's a library, not an app
 		}
@@ -972,7 +972,7 @@ func main () {
 	LineNo = 0
 
 	if FoundCompileErrors {
-		os.Exit(CX_COMPILATION_ERROR)
+		os.Exit(CxCompilationError)
 	}
 
 	if ReplMode || len(sourceCode) == 0 {
@@ -989,7 +989,7 @@ func main () {
 				// repl()
 			}
 			if AssertFailed() {
-				os.Exit(CX_ASSERT)
+				os.Exit(CxAssert)
 			}
 		}
 	}

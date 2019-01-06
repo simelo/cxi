@@ -1,8 +1,5 @@
 package base
 
-// "fmt"
-// "github.com/skycoin/skycoin/src/cipher/encoder"
-
 // AddType ...
 func (arg *CXArgument) AddType(typ string) *CXArgument {
 	// arg.Typ = typ
@@ -12,7 +9,7 @@ func (arg *CXArgument) AddType(typ string) *CXArgument {
 		arg.Size = size
 		arg.TotalSize = size
 	} else {
-		arg.Type = TYPE_UNDEFINED
+		arg.Type = TypeUndefined
 	}
 
 	return arg
