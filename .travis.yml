@@ -31,7 +31,7 @@ install:
 # Build, test & run cx test
 script:
   - make build
-  - make test
+#  - make test
   - make lint
 
 # Notifications to Telegram channel
